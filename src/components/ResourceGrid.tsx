@@ -84,7 +84,7 @@ const CATEGORY_DETAILS: Record<CategoryValue, CategoryDetail> = {
   },
   "Community & Student Orgs": {
     title: "Community & Student Orgs",
-    description: "Student organizations, identity and affinity groups, leadership groups, mentorship, and outreach."
+    description: "Student organizations, identity and affinity groups, leadership groups, mentorship, outreach, event planning, and student expression."
   },
   "Career Development": {
     title: "Career Development",
@@ -93,7 +93,7 @@ const CATEGORY_DETAILS: Record<CategoryValue, CategoryDetail> = {
   },
   "Housing & Campus Life": {
     title: "Housing & Campus Life",
-    description: "Housing, transportation, campus movement, night rides, and basic daily-life supports."
+    description: "Housing, transportation, Union services and spaces, food support, recreation, and basic daily-life supports."
   },
   "Emergency & Safety": {
     title: "Emergency & Safety",
@@ -152,12 +152,15 @@ const MINI_CATEGORY_ORDER: Partial<Record<ResourceCategory, string[]>> = {
   "Community & Student Orgs": [
     "Identity & Affinity Groups",
     "Student Organizations",
-    "Leadership, Mentoring & Outreach"
+    "Leadership, Mentoring & Outreach",
+    "Events & Student Expression"
   ],
   "Housing & Campus Life": [
+    "Basic Needs",
+    "Union Services & Spaces",
+    "Union Recreation & Events",
     "Housing & Campus Life",
-    "Transportation",
-    "Basic Needs"
+    "Transportation"
   ],
   "Emergency & Safety": [
     "Crisis & Emergency Help",

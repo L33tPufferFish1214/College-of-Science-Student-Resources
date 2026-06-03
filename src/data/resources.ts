@@ -345,6 +345,16 @@ export const RESOURCES_DATA: Resource[] = [
     relevanceTags: ["counselor", "financial help", "tuition timeline", "emergency fund"]
   },
   {
+    id: "union-scholarships",
+    name: "Union Scholarships",
+    description: "Scholarship hub for A. Ray Olpin Student Union awards, application information, and ways Union involvement can connect to financial support.",
+    url: "https://www.union.utah.edu/about-us/union-scholarships/",
+    category: "Scholarships & Financial Aid",
+    subcategory: "Scholarships",
+    tier: "all",
+    relevanceTags: ["union scholarships", "student union", "scholarship awards", "campus life funding"]
+  },
+  {
     id: "access-scholars-program",
     name: "ACCESS Scholars Program",
     description: "Multi-year cohort support network connecting women and underrepresented STEM leaders to monetary awards, peer mentors, and 800+ high-achieving alumnae.",
@@ -604,6 +614,48 @@ export const RESOURCES_DATA: Resource[] = [
     tier: "all",
     relevanceTags: ["mentors", "older peer help", "transition advice"]
   },
+  {
+    id: "union-programming-council",
+    name: "Union Programming Council & FAB",
+    description: "Student-led campus programming group where students can plan events, join Union boards, and explore Freshman Ambassador Board involvement.",
+    url: "https://www.union.utah.edu/student-opportunities/union-programming-council/apply-for-upc/",
+    category: "Community & Student Orgs",
+    subcategory: "Leadership, Mentoring & Outreach",
+    tier: "all",
+    relevanceTags: ["union programming council", "upc", "freshman ambassador board", "student events", "leadership"]
+  },
+  {
+    id: "feed-u-pantry-volunteer",
+    name: "Feed U Pantry Volunteer Opportunities",
+    description: "Volunteer with the Union pantry, help stock and distribute food, support food drives, and build direct service experience on campus.",
+    url: "https://www.union.utah.edu/resources-spaces/feed-u-pantry/about-us/",
+    category: "Community & Student Orgs",
+    subcategory: "Leadership, Mentoring & Outreach",
+    tier: "all",
+    relevanceTags: ["feed u pantry volunteer", "service", "food drive", "basic needs", "campus volunteering"]
+  },
+  {
+    id: "union-event-planning-reservations",
+    name: "Union Event Planning & Room Reservations",
+    description: "Reserve Union rooms, review event-planning policies, compare room options, and coordinate equipment, services, catering, and parking needs.",
+    url: "https://www.union.utah.edu/events-scheduling/",
+    category: "Community & Student Orgs",
+    subcategory: "Events & Student Expression",
+    tier: "all",
+    contact: "Events & Scheduling: 801-581-7251",
+    relevanceTags: ["union reservations", "event planning", "rooms", "mazevo", "student organization events"]
+  },
+  {
+    id: "union-make-your-change",
+    name: "Make Your Change",
+    description: "Union process for scheduling student events, protests, rallies, and public expression with available support such as speakers and microphones.",
+    url: "https://www.union.utah.edu/events-scheduling/make-your-change/",
+    category: "Community & Student Orgs",
+    subcategory: "Events & Student Expression",
+    tier: "all",
+    contact: "Events & Scheduling: 801-581-7251",
+    relevanceTags: ["make your change", "protest", "rally", "student expression", "free speech"]
+  },
 
   // Career Awareness / Launch
   {
@@ -725,6 +777,16 @@ export const RESOURCES_DATA: Resource[] = [
     tier: "all",
     relevanceTags: ["community champions", "internship", "public impact"]
   },
+  {
+    id: "union-student-jobs-fellowships",
+    name: "Union Student Jobs & Fellowships",
+    description: "Union student employment and fellowship opportunities designed for campus schedules, leadership growth, and practical workplace experience.",
+    url: "https://www.union.utah.edu/student-opportunities/",
+    category: "Career Development",
+    subcategory: "Jobs, Internships & Events",
+    tier: "all",
+    relevanceTags: ["union jobs", "student employment", "fellowships", "campus job", "leadership experience"]
+  },
 
   // Student Life & Housing
   {
@@ -761,9 +823,92 @@ export const RESOURCES_DATA: Resource[] = [
     description: "Free non-perishable food and some hygiene items for U students, faculty, and staff. Bring your UCard to the Union pantry.",
     url: "https://www.union.utah.edu/resources-spaces/feed-u-pantry/about-us/",
     category: "Housing & Campus Life",
+    subcategory: "Basic Needs",
     tier: "all",
     contact: "A. Ray Olpin Union Building / @feedupantry",
     relevanceTags: ["food pantry", "food insecurity", "free food", "ucard", "basic needs"]
+  },
+  {
+    id: "feed-u-pantry-hours-visitor-info",
+    name: "Feed U Pantry Hours & Visitor Info",
+    description: "Check current pantry hours, first-time visitor guidance, premade pantry bag access for active uNID/UCard users, satellite pantry notes, and community food resources.",
+    url: "https://www.union.utah.edu/visitor-information-resources/",
+    category: "Housing & Campus Life",
+    subcategory: "Basic Needs",
+    tier: "all",
+    relevanceTags: ["feed u pantry hours", "first-time visitor", "premade pantry bags", "food support", "basic needs"]
+  },
+  {
+    id: "feed-u-pantry-satellite-locations",
+    name: "Feed U Pantry Satellite Locations",
+    description: "Find alternate pantry pickup locations around campus when the main Union pantry is not the most convenient option.",
+    url: "https://www.union.utah.edu/resources-spaces/feed-u-pantry/satellite-locations/",
+    category: "Housing & Campus Life",
+    subcategory: "Basic Needs",
+    tier: "all",
+    relevanceTags: ["satellite pantry", "food pantry locations", "basic needs", "feed u pantry", "campus food"]
+  },
+  {
+    id: "union-dining-options",
+    name: "Union Dining Options",
+    description: "Union dining locations and meal-plan-friendly options where students can use meal taps, transfer meals, and flex dollars.",
+    url: "https://www.union.utah.edu/resources-spaces/dining/dining-options/",
+    category: "Housing & Campus Life",
+    subcategory: "Basic Needs",
+    tier: "all",
+    relevanceTags: ["union dining", "meal taps", "transfer meals", "flex dollars", "food"]
+  },
+  {
+    id: "student-union-resources-spaces",
+    name: "Student Union Resources & Spaces",
+    description: "Central Union hub for services, recreation, dining, study areas, resource centers, meditation space, nursing room, and other daily-use spaces.",
+    url: "https://www.union.utah.edu/resources-spaces/",
+    category: "Housing & Campus Life",
+    subcategory: "Union Services & Spaces",
+    tier: "all",
+    relevanceTags: ["student union", "union spaces", "campus services", "study spaces", "resource centers"]
+  },
+  {
+    id: "student-union-building-info",
+    name: "Union Building Info, Hours & Parking",
+    description: "Find Union building hours, floor maps, directions, parking information, and the building information pages before visiting.",
+    url: "https://www.union.utah.edu/about-us/building-information/",
+    category: "Housing & Campus Life",
+    subcategory: "Union Services & Spaces",
+    tier: "all",
+    contact: "Services Desk: 801-581-5888",
+    relevanceTags: ["union hours", "building map", "parking", "directions", "services desk"]
+  },
+  {
+    id: "student-union-services-desk",
+    name: "Union Services Desk & Lost and Found",
+    description: "Second-floor Union help desk for lost and found, discounted movie passes, poster/flyer stamping, campus mail, snacks, and general questions.",
+    url: "https://www.union.utah.edu/resources-spaces/services-desk/services-prices/",
+    category: "Housing & Campus Life",
+    subcategory: "Union Services & Spaces",
+    tier: "all",
+    contact: "801-581-5888",
+    relevanceTags: ["services desk", "lost and found", "flyer stamping", "movie passes", "campus mail"]
+  },
+  {
+    id: "student-union-study-spaces",
+    name: "Union Study Spaces",
+    description: "Quick reference for Union study areas and common spaces when students need a place to work, meet, or reset between classes.",
+    url: "https://www.union.utah.edu/resources-spaces/study-spaces/",
+    category: "Housing & Campus Life",
+    subcategory: "Union Services & Spaces",
+    tier: "all",
+    relevanceTags: ["study spaces", "union study", "quiet space", "campus study", "between classes"]
+  },
+  {
+    id: "student-union-recreation",
+    name: "Union Recreation",
+    description: "Low-cost bowling, billiards, table games, board games, TV lounge access, recreation reservations, and recreation class information.",
+    url: "https://www.union.utah.edu/resources-spaces/recreation/",
+    category: "Housing & Campus Life",
+    subcategory: "Union Recreation & Events",
+    tier: "all",
+    relevanceTags: ["union recreation", "bowling", "billiards", "board games", "tv lounge"]
   },
   {
     id: "safeu-reporting",
@@ -815,6 +960,16 @@ export const RESOURCES_DATA: Resource[] = [
     tier: "all",
     contact: "d.r.thomas@utah.edu / 801-213-0957",
     relevanceTags: ["lab hazard safety", "hazardous chemical", "waste protocol"]
+  },
+  {
+    id: "student-union-meditation-space",
+    name: "Union Meditation Space",
+    description: "Quiet third-floor Union room for meditation, prayer, religious or spiritual observance, or a low-stimulation reset while the building is open.",
+    url: "https://www.union.utah.edu/resources-spaces/meditation-space/",
+    category: "Wellness & Mental Health",
+    subcategory: "Self-Care Tools",
+    tier: "all",
+    relevanceTags: ["meditation space", "prayer room", "quiet space", "mindfulness", "spiritual observance"]
   },
   {
     id: "podcast-pace-yourself",
@@ -1277,6 +1432,16 @@ export const RESOURCES_DATA: Resource[] = [
     subcategory: "Campus & Community Resources",
     tier: "all",
     relevanceTags: ["campus resources", "community resources", "basic needs", "crisis lines", "identity support"]
+  },
+  {
+    id: "union-resource-centers",
+    name: "Union Resource Centers",
+    description: "Union hub for campus support offices including cultural engagement, first-generation support, student-parent support, the Dream Center, financial wellness, international student support, TRIO, and veterans support.",
+    url: "https://www.union.utah.edu/resources-spaces/resource-centers/",
+    category: "Student Access & Support",
+    subcategory: "Campus & Community Resources",
+    tier: "all",
+    relevanceTags: ["union resource centers", "first-generation", "dream center", "financial wellness", "trio"]
   },
   {
     id: "csar-basic-needs",
