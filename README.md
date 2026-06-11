@@ -14,7 +14,7 @@ This project brings those resources together in one organized, easy-to-use websi
 
 View the website here:
 
-[College of Science Student Resource Guide](https://l33tpufferfish1214.github.io/Collage-of-Science-Student-Resources/)
+[College of Science Student Resource Guide](https://l33tpufferfish1214.github.io/College-of-Science-Student-Resources/)
 
 ## Features
 
