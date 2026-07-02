@@ -407,11 +407,12 @@ export const RESOURCES_DATA: Resource[] = [
   {
     id: "geology-geophysics-scholarships",
     name: "Geology & Geophysics Scholarships",
-    description: "Undergraduate fellowships and resource funding specifically for geosciences researchers, field campers, and earth science enthusiasts.",
-    url: "https://earth.utah.edu/financial_aid.php",
+    description: "Undergraduate fellowships and resource funding for geosciences researchers and field campers — now applied for via the consolidated Liberal Arts & Sciences Scholarship Application in ScholarshipUniverse.",
+    url: "https://earth.utah.edu/financial_aid/undergraduate-scholarships.php",
     category: "Scholarships & Financial Aid",
     tier: "all",
     deadline: "Feb 15",
+    contact: "tonie.vandam@utah.edu",
     relevanceTags: ["geology", "earth science", "field work aid"]
   },
   {
@@ -679,11 +680,22 @@ export const RESOURCES_DATA: Resource[] = [
   {
     id: "science-internships-page",
     name: "Science Internships Overview",
-    description: "Interactive handbook detailing early research internships, corporate partnerships, and how to query the Handshake job board.",
-    url: "https://science.utah.edu/resources/internships/",
+    description: "Live Handshake internship listings, SCI 4890 academic credit info, and direct advising for internship placement and employer connections.",
+    url: "https://science.utah.edu/internships/available-internships/",
     category: "Career Development",
     tier: "all",
-    relevanceTags: ["internships", "jobs board", "handshake tools"]
+    contact: "Cameron Vakilian, Associate Director of Internships & Careers",
+    relevanceTags: ["internships", "jobs board", "handshake tools", "sci 4890"]
+  },
+  {
+    id: "learning-assistant-program",
+    name: "Learning Assistant (LA) Program",
+    description: "Paid position co-leading active learning in Biology, Chemistry, Math, Physics, Atmospheric Sciences, Geology, or SRI courses. Includes required SCI 5050 credit.",
+    url: "https://www.csme.utah.edu/la/",
+    category: "Career Development",
+    tier: "all",
+    deadline: "Fall 2026: priority Apr 6 – May 4, general through Jul 31",
+    relevanceTags: ["learning assistant", "la program", "csme", "paid teaching", "sci 5050"]
   },
   {
     id: "u-career-success",
@@ -1482,6 +1494,81 @@ export const RESOURCES_DATA: Resource[] = [
     subcategory: "Events & Outreach",
     tier: "all",
     relevanceTags: ["tabling", "outreach", "presentation", "connect with csar"]
+  },
+
+  // --- VOLUNTEERING, WELLNESS & FORMS (site audit additions) ---
+  {
+    id: "bennion-center-students",
+    name: "Bennion Center — Volunteering & Community Engagement",
+    description: "Everything volunteering-related lives on this one page: 40+ community partner programs, the no-commitment Service Corner, Utah Reads paid tutoring, Bennion Scholars, service-themed housing (incl. the H.I.V.E.), and community-engaged learning courses.",
+    url: "https://bennioncenter.utah.edu/students/index.php",
+    category: "Community & Student Orgs",
+    tier: "all",
+    relevanceTags: ["volunteering", "bennion center", "community service", "civic engagement", "service corner", "hive", "utah reads", "bennion scholars", "service house"]
+  },
+  {
+    id: "bennion-volunteer-interest-form",
+    name: "Volunteer Interest Form (Bennion Center)",
+    description: "The actual sign-up form to get matched with Bennion Center volunteer programs — the real starting point for most community partnerships.",
+    url: "https://bennioncenter.utah.edu/vif/index.php",
+    category: "Community & Student Orgs",
+    tier: "all",
+    relevanceTags: ["volunteer signup", "vif", "community partners", "bennion"]
+  },
+  {
+    id: "bennion-saturday-service",
+    name: "Saturday Service Projects",
+    description: "Recurring one-day volunteer events including Legacy of Lowell, MLK Day of Service, and the First-Year Experience cohort for new and transfer students.",
+    url: "https://bennioncenter.utah.edu/students/community-outreach/index.php",
+    category: "Community & Student Orgs",
+    tier: "all",
+    contact: "bryce.williams@utah.edu",
+    relevanceTags: ["saturday service", "mlk day", "first-year experience", "one-time volunteering"]
+  },
+  {
+    id: "bennion-alternative-breaks",
+    name: "Alternative Breaks",
+    description: "Week-long, community-engaged service trips during fall and spring break, run through the Bennion Center.",
+    url: "https://bennioncenter.utah.edu/students/alternative-breaks/index.php",
+    category: "Community & Student Orgs",
+    tier: "all",
+    relevanceTags: ["alternative breaks", "service trips", "spring break", "travel volunteering"]
+  },
+  {
+    id: "community-engagement-certificate",
+    name: "Community Engagement Certificate",
+    description: "Earn a 21-credit academic certificate plus capstone for sustained community-engaged coursework and service through the Bennion Center.",
+    url: "https://bennioncenter.utah.edu/certificate/index.php",
+    category: "Advising & Course Planning",
+    tier: 2,
+    relevanceTags: ["certificate", "community engaged learning", "capstone", "academic credit"]
+  },
+  {
+    id: "center-for-campus-wellness",
+    name: "Center for Campus Wellness",
+    description: "Umbrella wellness office — one page links out to alcohol & substance support, wellness coaching, health education, sexual wellness (free safer-sex supplies), spiritual wellness, and confidential violence/harm advocacy.",
+    url: "https://wellness.utah.edu/programs/",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    relevanceTags: ["wellness coaching", "campus wellness", "sexual wellness", "advocates", "substance use", "spiritual wellness", "violence support", "health education"]
+  },
+  {
+    id: "campus-recreation-services",
+    name: "Campus Recreation Services",
+    description: "One rec hub covering free group fitness & yoga classes, intramurals, outdoor adventure trips, the climbing wall, and the George S. Eccles Student Life Center pool and fitness facilities.",
+    url: "https://campusrec.utah.edu/",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    relevanceTags: ["yoga", "fitness", "gym", "student life center", "recreation", "intramurals", "climbing wall", "pool"]
+  },
+  {
+    id: "permission-code-requests",
+    name: "Permission Numbers Request Sites",
+    description: "Registrar-maintained directory linking to every department's own permission code / override request form and contact — Mines & Earth, Kinesiology, Writing, Computer Science, and more, all in one place.",
+    url: "https://registrar.utah.edu/register/permission-numbers-requests.php",
+    category: "Advising & Course Planning",
+    tier: "all",
+    relevanceTags: ["permission code", "override request", "registrar", "add class", "department forms"]
   },
 
   // --- DEPARTMENT HUBS ---

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, Check, ExternalLink, Filter, HelpCircle, RotateCcw, Search, Share2, X } from "lucide-react";
 import { getCategoryStyle } from "../data/categoryStyles";
 import type { Resource, ResourceCategory } from "../data/resources";
+import { createResourceSearch } from "../lib/search";
 
 interface ResourceGridProps {
   resources: Resource[];
@@ -338,6 +339,11 @@ export function ResourceGrid({
   const selectedCategoryDetail = CATEGORY_DETAILS[selectedCategoryValue];
   const activeCategoryStyle = getDisplayCategoryStyle(selectedCategoryValue);
   const selectedFeaturedResourceIds = selectedCategoryDetail.featuredResourceIds ?? [];
+  const fuse = useMemo(() => createResourceSearch(resources), [resources]);
+  const fuzzyMatchIds = useMemo(() => {
+    if (!isSearchActive) return new Set<string>();
+    return new Set(fuse.search(trimmedSearchQuery).map((result) => result.item.id));
+  }, [fuse, isSearchActive, trimmedSearchQuery]);
   const selectedFeaturedResources = useMemo(() => {
     if (isSearchActive || selectedFeaturedResourceIds.length === 0) return [];
 
@@ -388,15 +394,17 @@ export function ResourceGrid({
         const isCompactMatch =
           compactQuery.length > 1 &&
           searchableFields.some((field) => field.replace(/\s+/g, "").includes(compactQuery));
+        // Fuzzy fallback catches typos and related-tag matches the exact/compact checks above miss
+        const isFuzzyMatch = fuzzyMatchIds.has(item.id);
 
-        if (!isDirectMatch && !isCompactMatch) {
+        if (!isDirectMatch && !isCompactMatch && !isFuzzyMatch) {
           return false;
         }
       }
 
       return true;
     });
-  }, [resources, isSearchActive, trimmedSearchQuery, selectedCategoryValue, selectedFeaturedResourceIds, selectedTier]);
+  }, [resources, isSearchActive, trimmedSearchQuery, selectedCategoryValue, selectedFeaturedResourceIds, selectedTier, fuzzyMatchIds]);
 
   const groupedResources = useMemo(() => {
     const groups = new Map<string, Resource[]>();

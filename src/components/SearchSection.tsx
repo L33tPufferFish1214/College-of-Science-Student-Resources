@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
-import { Search, X } from "lucide-react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { Search, X, ChevronRight } from "lucide-react";
 import uOfULogo from "../assets/images/regenerated_image_1779306578444.png";
+import { RESOURCES_DATA, type Resource } from "../data/resources";
+import { createResourceSearch } from "../lib/search";
 
 interface SearchSectionProps {
   searchQuery: string;
@@ -11,7 +13,22 @@ interface SearchSectionProps {
 
 export function SearchSection({ searchQuery, setSearchQuery, onPopularSelect, setActiveView }: SearchSectionProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState<Resource[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fuse = useMemo(() => createResourceSearch(RESOURCES_DATA), []);
+
+  // Live fuzzy suggestions as you type, debounced so fast typing doesn't flash intermediate results
+  useEffect(() => {
+    const query = searchQuery.trim();
+    if (query === "") {
+      setSuggestions([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setSuggestions(fuse.search(query, { limit: 6 }).map((result) => result.item));
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [searchQuery, fuse]);
 
   // Clear search safely
   const handleClear = () => {
@@ -84,6 +101,29 @@ export function SearchSection({ searchQuery, setSearchQuery, onPopularSelect, se
               Search
             </button>
           </form>
+
+          {isFocused && searchQuery.trim() !== "" && suggestions.length > 0 && (
+            <div
+              className="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-20 text-left"
+              id="live-search-suggestions"
+            >
+              {suggestions.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onPopularSelect(item.name)}
+                  className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-utah-red-soft/40 transition-colors cursor-pointer border-b border-gray-100 last:border-0"
+                  id={`live-suggestion-${item.id}`}
+                >
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-gray-950 truncate">{item.name}</span>
+                    <span className="block text-[11px] text-gray-500 truncate">{item.category}</span>
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
