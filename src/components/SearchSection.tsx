@@ -115,9 +115,9 @@ export function SearchSection({ searchQuery, setSearchQuery, onPopularSelect, se
                   className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-utah-red-soft/40 transition-colors cursor-pointer border-b border-gray-100 last:border-0"
                   id={`live-suggestion-${item.id}`}
                 >
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-gray-950 truncate">{item.name}</span>
-                    <span className="block text-[11px] text-gray-500 truncate">{item.category}</span>
+                  <span className="min-w-0 flex-1 flex flex-col items-start text-left">
+                    <span className="w-full text-sm font-semibold text-gray-950 truncate">{item.name}</span>
+                    <span className="w-full text-[11px] text-gray-500 truncate">{item.category}</span>
                   </span>
                   <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
                 </button>
