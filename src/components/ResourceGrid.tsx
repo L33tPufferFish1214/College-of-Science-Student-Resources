@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Calendar, Check, ExternalLink, Filter, HelpCircle, RotateCcw, Search, Share2, X } from "lucide-react";
 import { getCategoryStyle } from "../data/categoryStyles";
 import type { Resource, ResourceCategory } from "../data/resources";
@@ -175,6 +175,8 @@ const MINI_CATEGORY_ORDER: Partial<Record<ResourceCategory, string[]>> = {
 const normalizeSearchText = (value: string) =>
   value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
+const TOP_MATCH_COUNT = 4; // size of the "Best Matches" strip shown above grouped search results
+
 const isKnownCategory = (value: string): value is ResourceCategory =>
   CATEGORIES.some((category) => category.value === value && category.value !== "all");
 
@@ -340,10 +342,15 @@ export function ResourceGrid({
   const activeCategoryStyle = getDisplayCategoryStyle(selectedCategoryValue);
   const selectedFeaturedResourceIds = selectedCategoryDetail.featuredResourceIds ?? [];
   const fuse = useMemo(() => createResourceSearch(resources), [resources]);
-  const fuzzyMatchIds = useMemo(() => {
-    if (!isSearchActive) return new Set<string>();
-    return new Set(fuse.search(trimmedSearchQuery).map((result) => result.item.id));
+  // Fuse returns results best-first with a score (0 = perfect); we keep both the
+  // id set (for the pass/fail filter) and the score map (to rank results by relevance).
+  const relevanceById = useMemo(() => {
+    const map = new Map<string, number>();
+    if (!isSearchActive) return map;
+    fuse.search(trimmedSearchQuery).forEach((result) => map.set(result.item.id, result.score ?? 1));
+    return map;
   }, [fuse, isSearchActive, trimmedSearchQuery]);
+  const fuzzyMatchIds = useMemo(() => new Set(relevanceById.keys()), [relevanceById]);
   const selectedFeaturedResources = useMemo(() => {
     if (isSearchActive || selectedFeaturedResourceIds.length === 0) return [];
 
@@ -352,13 +359,8 @@ export function ResourceGrid({
       .filter((resource): resource is Resource => Boolean(resource));
   }, [isSearchActive, resources, selectedFeaturedResourceIds]);
 
-  useEffect(() => {
-    if (searchQuery && inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.value.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
+  // ponytail: removed auto-focus-on-mount here — it was re-summoning the mobile
+  // keyboard immediately after a search/suggestion click navigated into this view.
 
   const filteredResources = useMemo(() => {
     return resources.filter((item) => {
@@ -414,7 +416,11 @@ export function ResourceGrid({
       groups.set(groupName, [...(groups.get(groupName) ?? []), item]);
     });
     groups.forEach((groupItems) => {
-      groupItems.sort((itemA, itemB) => getTierRank(itemA.tier) - getTierRank(itemB.tier));
+      groupItems.sort((itemA, itemB) =>
+        isSearchActive
+          ? (relevanceById.get(itemA.id) ?? 1) - (relevanceById.get(itemB.id) ?? 1)
+          : getTierRank(itemA.tier) - getTierRank(itemB.tier)
+      );
     });
 
     const orderedGroups =
@@ -431,7 +437,16 @@ export function ResourceGrid({
       if (indexB === -1) return -1;
       return indexA - indexB;
     });
-  }, [filteredResources, isSearchActive, selectedCategoryValue]);
+  }, [filteredResources, isSearchActive, selectedCategoryValue, relevanceById]);
+
+  // Best-first strip shown above the category groups during search, so the closest
+  // match is at the top instead of buried in whichever category renders first.
+  const topMatches = useMemo(() => {
+    if (!isSearchActive || filteredResources.length <= TOP_MATCH_COUNT) return [];
+    return [...filteredResources]
+      .sort((itemA, itemB) => (relevanceById.get(itemA.id) ?? 1) - (relevanceById.get(itemB.id) ?? 1))
+      .slice(0, TOP_MATCH_COUNT);
+  }, [filteredResources, isSearchActive, relevanceById]);
 
   const handleShare = (id: string, url: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -856,6 +871,28 @@ export function ResourceGrid({
         </div>
       ) : (
         <div id="resources-grouped-results">
+          {topMatches.length > 0 && (
+            <section className="mt-8" id="group-best-matches">
+              <div className="mb-3 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-gray-200 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="h-3 w-3 rounded-sm shrink-0 bg-utah-red"
+                    aria-hidden="true"
+                  />
+                  <h3 className="text-sm sm:text-base font-bold text-gray-950 tracking-normal">
+                    Best Matches
+                  </h3>
+                </div>
+                <span className="text-[11px] font-bold uppercase tracking-normal text-gray-400">
+                  Closest to "{trimmedSearchQuery}"
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid-best-matches">
+                {topMatches.map(renderResourceCard)}
+              </div>
+            </section>
+          )}
           {groupedResources.map(([groupName, groupItems]) => {
             const groupStyle = isKnownCategory(groupName) ? getCategoryStyle(groupName) : activeCategoryStyle;
 
