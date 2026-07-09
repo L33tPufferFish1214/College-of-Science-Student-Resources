@@ -358,7 +358,7 @@ export default function App() {
                   {/* SRI */}
                   <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between" id="featured-sri">
                     <div>
-                      <span className="inline-block pl-0 pr-2.5 py-0.5 rounded bg-utah-red-soft text-utah-red text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
+                      <span className="inline-block px-2.5 py-0.5 rounded bg-utah-red-soft text-utah-red text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
                         Research Day 1
                       </span>
                       <h4 className="font-bold text-gray-950 text-sm sm:text-base leading-snug">
@@ -381,7 +381,7 @@ export default function App() {
                   {/* Beckman */}
                   <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between" id="featured-beckman">
                     <div>
-                      <span className="inline-block pl-0 pr-2.5 py-0.5 rounded bg-gray-100 text-gray-800 text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
+                      <span className="inline-block px-2.5 py-0.5 rounded bg-gray-100 text-gray-800 text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
                         $21,000 Stipend
                       </span>
                       <h4 className="font-bold text-gray-950 text-sm sm:text-base leading-snug">
@@ -404,7 +404,7 @@ export default function App() {
                   {/* ACCESS */}
                   <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between" id="featured-access">
                     <div>
-                      <span className="inline-block pl-0 pr-2.5 py-0.5 rounded bg-utah-red-soft text-utah-red text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
+                      <span className="inline-block px-2.5 py-0.5 rounded bg-utah-red-soft text-utah-red text-[9px] font-sans font-bold uppercase tracking-normal mb-3">
                         800+ Alumnae
                       </span>
                       <h4 className="font-bold text-gray-950 text-sm sm:text-base leading-snug">
