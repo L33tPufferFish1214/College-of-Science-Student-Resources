@@ -45,7 +45,22 @@ export default function App() {
   const [selectedTier, setSelectedTier] = useState<1 | 2 | "all">("all");
   const [quickResourceIds, setQuickResourceIds] = useState<string[] | null>(null);
 
+  // ponytail: native History API instead of a router — this app only ever
+  // needs the browser back/forward buttons to retrace in-app view switches
+  // (e.g. home -> resources), not deep-linkable URLs per view.
   useEffect(() => {
+    const onPopState = (event: PopStateEvent) => {
+      setActiveView(event.state?.view ?? "home");
+    };
+    history.replaceState({ view: "home" }, "");
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    if (history.state?.view !== activeView) {
+      history.pushState({ view: activeView }, "");
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [activeView]);
 
