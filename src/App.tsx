@@ -12,6 +12,11 @@ import {
   FlaskConical, 
   Heart, 
   HeartHandshake,
+  BriefcaseBusiness,
+  Compass,
+  DollarSign,
+  LifeBuoy,
+  Microscope,
   UserCheck, 
   Users, 
   ArrowRight, 
@@ -23,6 +28,15 @@ type QuickCard = {
   icon: LucideIcon;
   category: string;
   resourceIds?: string[];
+};
+
+type SpotlightGroup = {
+  title: string;
+  icon: LucideIcon;
+  category: string;
+  query: string;
+  examples: string[];
+  accent: string;
 };
 
 export default function App() {
@@ -105,6 +119,57 @@ export default function App() {
     { label: "Student Communities", icon: Users, category: "Community & Student Orgs" }
   ];
 
+  const SPOTLIGHT_GROUPS: SpotlightGroup[] = [
+    {
+      title: "Research Starters",
+      icon: Microscope,
+      category: "Research & Internships",
+      query: "SRI UROP SPUR research symposium",
+      examples: ["SRI", "UROP", "SPUR", "Research Symposium"],
+      accent: "#B72222"
+    },
+    {
+      title: "Academic Help",
+      icon: LifeBuoy,
+      category: "Academic Help",
+      query: "Learning Center Math Center Chemistry tutoring E-Tutoring Writing Center",
+      examples: ["Learning Center", "Math Center", "E-Tutoring", "Writing Center"],
+      accent: "#2563EB"
+    },
+    {
+      title: "Advising & Registration",
+      icon: Compass,
+      category: "Advising & Course Planning",
+      query: "Academic Advising appointment permission codes registration",
+      examples: ["Advising Hub", "Appointments", "Permission Codes", "Degree Plans"],
+      accent: "#047857"
+    },
+    {
+      title: "Money & Opportunities",
+      icon: DollarSign,
+      category: "Scholarships & Financial Aid",
+      query: "ScholarshipUniverse ACCESS Scholars department scholarships financial aid",
+      examples: ["ScholarshipUniverse", "ACCESS", "Department Awards", "Financial Aid"],
+      accent: "#A16207"
+    },
+    {
+      title: "Campus Life & Support",
+      icon: HeartHandshake,
+      category: "Student Access & Support",
+      query: "Campus Connect CSAR Feed U Pantry Campus Wellness",
+      examples: ["CSAR", "Campus Connect", "Feed U Pantry", "Wellness"],
+      accent: "#7C3AED"
+    },
+    {
+      title: "Careers & Teaching",
+      icon: BriefcaseBusiness,
+      category: "Career Development",
+      query: "Learning Assistant Program science internships Handshake U Career Success",
+      examples: ["LA Program", "Internships", "Handshake", "Career Success"],
+      accent: "#C2410C"
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f7f7f5]" id="app-viewport">
       
@@ -128,6 +193,62 @@ export default function App() {
               onPopularSelect={handlePopularSelect}
               setActiveView={handleViewChange}
             />
+
+            {/* Mainstream resource shortcuts */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6" id="homepage-spotlight-section">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-950 tracking-normal">
+                    Start With These
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Broad resource hubs and programs students most often need first.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" id="homepage-spotlight-grid">
+                {SPOTLIGHT_GROUPS.map((group) => {
+                  const IconComponent = group.icon;
+                  return (
+                    <button
+                      key={group.title}
+                      type="button"
+                      onClick={() => handleSuggestQuery(group.query, group.category, "all")}
+                      className="bg-white border border-gray-200 rounded-lg p-4 text-left hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
+                      id={`spotlight-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 min-w-0">
+                          <span
+                            className="w-9 h-9 rounded-md flex items-center justify-center shrink-0"
+                            style={{ backgroundColor: `${group.accent}14`, color: group.accent }}
+                          >
+                            <IconComponent className="w-4.5 h-4.5" />
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block text-sm font-bold text-gray-950 tracking-normal">
+                              {group.title}
+                            </span>
+                            <span className="mt-2 flex flex-wrap gap-1.5">
+                              {group.examples.map((example) => (
+                                <span
+                                  key={example}
+                                  className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-[11px] font-medium leading-none"
+                                >
+                                  {example}
+                                </span>
+                              ))}
+                            </span>
+                          </span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-gray-600 transition-colors shrink-0 mt-2" />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
 
             {/* Quick Access Grid Cards */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4" id="quick-categories-section">
