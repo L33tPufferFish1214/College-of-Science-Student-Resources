@@ -33,8 +33,7 @@ type QuickCard = {
 type SpotlightGroup = {
   title: string;
   icon: LucideIcon;
-  category: string;
-  query: string;
+  resourceIds: string[];
   examples: string[];
   accent: string;
 };
@@ -123,48 +122,78 @@ export default function App() {
     {
       title: "Research Starters",
       icon: Microscope,
-      category: "Research & Internships",
-      query: "SRI UROP SPUR research symposium",
+      resourceIds: [
+        "science-research-initiative",
+        "urop-undergrad-research",
+        "spur-summer-research",
+        "undergrad-research-symposium",
+        "research-at-the-u-overview"
+      ],
       examples: ["SRI", "UROP", "SPUR", "Research Symposium"],
       accent: "#B72222"
     },
     {
       title: "Academic Help",
       icon: LifeBuoy,
-      category: "Academic Help",
-      query: "Learning Center Math Center Chemistry tutoring E-Tutoring Writing Center",
+      resourceIds: [
+        "the-learning-center",
+        "mathematics-tutoring-center",
+        "chemistry-tutoring-center",
+        "e-tutoring-online",
+        "writing-center"
+      ],
       examples: ["Learning Center", "Math Center", "E-Tutoring", "Writing Center"],
       accent: "#2563EB"
     },
     {
       title: "Advising & Registration",
       icon: Compass,
-      category: "Advising & Course Planning",
-      query: "Academic Advising appointment permission codes registration",
+      resourceIds: [
+        "academic-advising-hub",
+        "schedule-advising-appointment",
+        "permission-code-requests",
+        "drop-in-advising",
+        "math-permission-codes-registration"
+      ],
       examples: ["Advising Hub", "Appointments", "Permission Codes", "Degree Plans"],
       accent: "#047857"
     },
     {
       title: "Money & Opportunities",
       icon: DollarSign,
-      category: "Scholarships & Financial Aid",
-      query: "ScholarshipUniverse ACCESS Scholars department scholarships financial aid",
+      resourceIds: [
+        "scholarship-universe-portal",
+        "access-scholars-program",
+        "csar-scholarships",
+        "chemistry-scholarships",
+        "biology-scholarships"
+      ],
       examples: ["ScholarshipUniverse", "ACCESS", "Department Awards", "Financial Aid"],
       accent: "#A16207"
     },
     {
       title: "Campus Life & Support",
       icon: HeartHandshake,
-      category: "Student Access & Support",
-      query: "Campus Connect CSAR Feed U Pantry Campus Wellness",
+      resourceIds: [
+        "csar-home",
+        "campus-connect-student-organizations",
+        "feed-u-food-pantry",
+        "center-for-campus-wellness",
+        "campus-recreation-services"
+      ],
       examples: ["CSAR", "Campus Connect", "Feed U Pantry", "Wellness"],
       accent: "#7C3AED"
     },
     {
       title: "Careers & Teaching",
       icon: BriefcaseBusiness,
-      category: "Career Development",
-      query: "Learning Assistant Program science internships Handshake U Career Success",
+      resourceIds: [
+        "learning-assistant-program",
+        "science-internships-page",
+        "handshake-job-board",
+        "u-career-success",
+        "career-coaching-hub"
+      ],
       examples: ["LA Program", "Internships", "Handshake", "Career Success"],
       accent: "#C2410C"
     }
@@ -214,7 +243,7 @@ export default function App() {
                     <button
                       key={group.title}
                       type="button"
-                      onClick={() => handleSuggestQuery(group.query, group.category, "all")}
+                      onClick={() => handleQuickResourceClick(group.resourceIds)}
                       className="bg-white border border-gray-200 rounded-lg p-4 text-left hover:shadow-md hover:border-gray-300 transition-all cursor-pointer group"
                       id={`spotlight-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                     >
