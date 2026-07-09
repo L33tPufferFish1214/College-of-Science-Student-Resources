@@ -1,8 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Calendar, Check, ExternalLink, Filter, HelpCircle, RotateCcw, Search, Share2, X } from "lucide-react";
 import { getCategoryStyle } from "../data/categoryStyles";
-import type { Resource, ResourceCategory } from "../data/resources";
-import { createResourceSearch } from "../lib/search";
+import type { Resource, ResourceCategory, ResourceDepartment } from "../data/resources";
+import {
+  createResourceSearch,
+  getResourceSearchFields,
+  getResourceSearchRank,
+  normalizeSearchText
+} from "../lib/search";
 
 interface ResourceGridProps {
   resources: Resource[];
@@ -15,10 +20,16 @@ interface ResourceGridProps {
 }
 
 type CategoryValue = ResourceCategory | "all";
+type DepartmentValue = ResourceDepartment | "all";
 
 type CategoryOption = {
   label: string;
   value: CategoryValue;
+};
+
+type DepartmentOption = {
+  label: string;
+  value: DepartmentValue;
 };
 
 type CategoryDetail = {
@@ -42,6 +53,19 @@ const CATEGORIES: CategoryOption[] = [
   { label: "Housing & Campus Life", value: "Housing & Campus Life" },
   { label: "Emergency & Safety", value: "Emergency & Safety" },
   { label: "Department Hubs", value: "Department Hubs" }
+];
+
+const DEPARTMENT_OPTIONS: DepartmentOption[] = [
+  { label: "All Departments", value: "all" },
+  { label: "Atmospheric Sciences", value: "Atmospheric Sciences" },
+  { label: "Biology", value: "Biology" },
+  { label: "Chemistry", value: "Chemistry" },
+  { label: "Earth & Environmental Science", value: "Earth & Environmental Science" },
+  { label: "Geology", value: "Geology" },
+  { label: "Mathematics", value: "Mathematics" },
+  { label: "Metallurgical Engineering", value: "Metallurgical Engineering" },
+  { label: "Mining Engineering", value: "Mining Engineering" },
+  { label: "Physics & Astronomy", value: "Physics & Astronomy" }
 ];
 
 const ALL_CATEGORY_STYLE = {
@@ -172,8 +196,7 @@ const MINI_CATEGORY_ORDER: Partial<Record<ResourceCategory, string[]>> = {
   "Department Hubs": ["Department Home Pages"]
 };
 
-const normalizeSearchText = (value: string) =>
-  value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const TOP_MATCH_COUNT = 4; // size of the "Best Matches" strip shown above grouped search results
 
 const isKnownCategory = (value: string): value is ResourceCategory =>
   CATEGORIES.some((category) => category.value === value && category.value !== "all");
@@ -330,6 +353,7 @@ export function ResourceGrid({
 }: ResourceGridProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<DepartmentValue>("all");
   const inputRef = useRef<HTMLInputElement>(null);
   const trimmedSearchQuery = searchQuery.trim();
   const isSearchActive = trimmedSearchQuery.length > 0;
@@ -338,12 +362,47 @@ export function ResourceGrid({
     : "all") as CategoryValue;
   const selectedCategoryDetail = CATEGORY_DETAILS[selectedCategoryValue];
   const activeCategoryStyle = getDisplayCategoryStyle(selectedCategoryValue);
+  const selectedDepartmentDetail =
+    DEPARTMENT_OPTIONS.find((department) => department.value === selectedDepartment) ?? DEPARTMENT_OPTIONS[0];
+  const isDepartmentFiltered = selectedDepartment !== "all";
+  const availableDepartmentOptions = useMemo(
+    () =>
+      DEPARTMENT_OPTIONS.filter(
+        (department) =>
+          department.value === "all" ||
+          resources.some((resource) => resource.department === department.value)
+      ),
+    [resources]
+  );
   const selectedFeaturedResourceIds = selectedCategoryDetail.featuredResourceIds ?? [];
   const fuse = useMemo(() => createResourceSearch(resources), [resources]);
-  const fuzzyMatchIds = useMemo(() => {
-    if (!isSearchActive) return new Set<string>();
-    return new Set(fuse.search(trimmedSearchQuery).map((result) => result.item.id));
-  }, [fuse, isSearchActive, trimmedSearchQuery]);
+  const relevanceById = useMemo(() => {
+    const map = new Map<string, number>();
+    if (!isSearchActive) return map;
+
+    const query = normalizeSearchText(trimmedSearchQuery);
+    const compactQuery = query.replace(/\s+/g, "");
+    const allowCompactMatch = query.includes(" ") && compactQuery.length >= 4;
+    const fuzzyScores = new Map<string, number>(
+      fuse.search(trimmedSearchQuery).map((result) => [result.item.id, result.score ?? 1])
+    );
+
+    resources.forEach((item) => {
+      const searchableFields = getResourceSearchFields(item);
+      const isDirectMatch = searchableFields.some((field) => field.includes(query));
+      const isCompactMatch =
+        allowCompactMatch &&
+        searchableFields.some((field) => field.replace(/\s+/g, "").includes(compactQuery));
+      const fuzzyScore = fuzzyScores.get(item.id);
+
+      if (isDirectMatch || isCompactMatch || fuzzyScore !== undefined) {
+        map.set(item.id, getResourceSearchRank(item, trimmedSearchQuery, fuzzyScore));
+      }
+    });
+
+    return map;
+  }, [fuse, isSearchActive, resources, trimmedSearchQuery]);
+  const searchMatchIds = useMemo(() => new Set(relevanceById.keys()), [relevanceById]);
   const selectedFeaturedResources = useMemo(() => {
     if (isSearchActive || selectedFeaturedResourceIds.length === 0) return [];
 
@@ -352,13 +411,7 @@ export function ResourceGrid({
       .filter((resource): resource is Resource => Boolean(resource));
   }, [isSearchActive, resources, selectedFeaturedResourceIds]);
 
-  useEffect(() => {
-    if (searchQuery && inputRef.current) {
-      inputRef.current.focus();
-      const len = inputRef.current.value.length;
-      inputRef.current.setSelectionRange(len, len);
-    }
-  }, []);
+  // Avoid re-summoning the mobile keyboard after a search/suggestion click opens this view.
 
   const filteredResources = useMemo(() => {
     return resources.filter((item) => {
@@ -366,6 +419,10 @@ export function ResourceGrid({
         if (item.tier !== "all" && item.tier !== selectedTier) {
           return false;
         }
+      }
+
+      if (isDepartmentFiltered && item.department !== selectedDepartment) {
+        return false;
       }
 
       if (!isSearchActive && selectedCategoryValue !== "all") {
@@ -378,33 +435,22 @@ export function ResourceGrid({
         }
       }
 
-      if (isSearchActive) {
-        const query = normalizeSearchText(trimmedSearchQuery);
-        const compactQuery = query.replace(/\s+/g, "");
-        const searchableFields = [
-          item.name,
-          item.description,
-          item.category,
-          item.subcategory ?? "",
-          item.deadline ?? "",
-          item.contact ?? "",
-          ...item.relevanceTags
-        ].map(normalizeSearchText);
-        const isDirectMatch = searchableFields.some((field) => field.includes(query));
-        const isCompactMatch =
-          compactQuery.length > 1 &&
-          searchableFields.some((field) => field.replace(/\s+/g, "").includes(compactQuery));
-        // Fuzzy fallback catches typos and related-tag matches the exact/compact checks above miss
-        const isFuzzyMatch = fuzzyMatchIds.has(item.id);
-
-        if (!isDirectMatch && !isCompactMatch && !isFuzzyMatch) {
-          return false;
-        }
+      if (isSearchActive && !searchMatchIds.has(item.id)) {
+        return false;
       }
 
       return true;
     });
-  }, [resources, isSearchActive, trimmedSearchQuery, selectedCategoryValue, selectedFeaturedResourceIds, selectedTier, fuzzyMatchIds]);
+  }, [
+    resources,
+    isDepartmentFiltered,
+    isSearchActive,
+    selectedCategoryValue,
+    selectedDepartment,
+    selectedFeaturedResourceIds,
+    selectedTier,
+    searchMatchIds
+  ]);
 
   const groupedResources = useMemo(() => {
     const groups = new Map<string, Resource[]>();
@@ -414,7 +460,11 @@ export function ResourceGrid({
       groups.set(groupName, [...(groups.get(groupName) ?? []), item]);
     });
     groups.forEach((groupItems) => {
-      groupItems.sort((itemA, itemB) => getTierRank(itemA.tier) - getTierRank(itemB.tier));
+      groupItems.sort((itemA, itemB) =>
+        isSearchActive
+          ? (relevanceById.get(itemA.id) ?? 1) - (relevanceById.get(itemB.id) ?? 1)
+          : getTierRank(itemA.tier) - getTierRank(itemB.tier)
+      );
     });
 
     const orderedGroups =
@@ -431,7 +481,16 @@ export function ResourceGrid({
       if (indexB === -1) return -1;
       return indexA - indexB;
     });
-  }, [filteredResources, isSearchActive, selectedCategoryValue]);
+  }, [filteredResources, isSearchActive, selectedCategoryValue, relevanceById]);
+
+  // Best-first strip shown above the category groups during search, so the closest
+  // match is at the top instead of buried in whichever category renders first.
+  const topMatches = useMemo(() => {
+    if (!isSearchActive || filteredResources.length <= TOP_MATCH_COUNT) return [];
+    return [...filteredResources]
+      .sort((itemA, itemB) => (relevanceById.get(itemA.id) ?? 1) - (relevanceById.get(itemB.id) ?? 1))
+      .slice(0, TOP_MATCH_COUNT);
+  }, [filteredResources, isSearchActive, relevanceById]);
 
   const handleShare = (id: string, url: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -449,19 +508,22 @@ export function ResourceGrid({
   const handleResetFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
+    setSelectedDepartment("all");
     setSelectedTier("all");
   };
 
   const resultsSummary = isSearchActive
-    ? `Showing ${filteredResources.length} resources matching search across all categories`
+    ? `Showing ${filteredResources.length} resources matching search${isDepartmentFiltered ? ` in ${selectedDepartmentDetail.label}` : " across all categories"}`
     : selectedCategoryValue === "all"
-      ? `Showing ${filteredResources.length} resources in the directory`
+      ? `Showing ${filteredResources.length} ${isDepartmentFiltered ? `${selectedDepartmentDetail.label} resources` : "resources in the directory"}`
       : selectedFeaturedResources.length > 0
-        ? `Showing ${filteredResources.length} additional resources in ${selectedCategoryDetail.title}`
-        : `Showing ${filteredResources.length} resources in ${selectedCategoryDetail.title}`;
+        ? `Showing ${filteredResources.length} additional resources in ${selectedCategoryDetail.title}${isDepartmentFiltered ? ` for ${selectedDepartmentDetail.label}` : ""}`
+        : `Showing ${filteredResources.length} resources in ${selectedCategoryDetail.title}${isDepartmentFiltered ? ` for ${selectedDepartmentDetail.label}` : ""}`;
 
   const renderResourceCard = (item: Resource) => {
     const categoryStyle = getCategoryStyle(item.category);
+    const hasSourceLink = Boolean(item.sourceUrl && item.sourceUrl !== item.url);
+    const sourceLabel = item.sourceLabel ?? "Dept home";
 
     return (
       <div
@@ -542,6 +604,19 @@ export function ResourceGrid({
                 <span className="truncate block mt-0.5 font-medium">{item.contact}</span>
               </div>
             )}
+
+            {item.department && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedDepartment(item.department ?? "all");
+                }}
+                className="mt-3 inline-flex items-center rounded-md border border-gray-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-normal text-gray-500 hover:border-gray-300 hover:text-gray-900 transition-colors cursor-pointer"
+                id={`department-card-chip-${item.id}`}
+              >
+                {item.department}
+              </button>
+            )}
           </div>
 
           <div className="mt-5 pt-4 border-t border-gray-50 flex flex-wrap gap-1">
@@ -560,7 +635,7 @@ export function ResourceGrid({
           </div>
         </div>
 
-        <div className="bg-gray-50/60 px-5 sm:px-6 py-3.5 border-t border-gray-100 flex items-center justify-end gap-2">
+        <div className="bg-gray-50/60 px-5 sm:px-6 py-3.5 border-t border-gray-100 flex flex-wrap items-center justify-end gap-2">
           <button
             onClick={(e) => handleShare(item.id, item.url, e)}
             className="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer"
@@ -573,6 +648,20 @@ export function ResourceGrid({
               <Share2 className="w-3.5 h-3.5" />
             )}
           </button>
+
+          {hasSourceLink && (
+            <a
+              href={item.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 py-1.5 px-2.5 rounded-md text-[11px] font-bold bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:text-gray-950 transition-all cursor-pointer"
+              id={`source-btn-${item.id}`}
+              title={`Open ${sourceLabel}`}
+            >
+              <span>{sourceLabel}</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
 
           <a
             href={item.url}
@@ -602,7 +691,7 @@ export function ResourceGrid({
           </p>
         </div>
 
-        {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all") && (
+        {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all" || isDepartmentFiltered) && (
           <button
             onClick={handleResetFilters}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors self-start cursor-pointer"
@@ -737,6 +826,41 @@ export function ResourceGrid({
             );
           })}
         </div>
+
+        {availableDepartmentOptions.length > 1 && (
+          <div className="bg-white p-4 rounded-lg border border-gray-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="shrink-0">
+              <span className="text-xs font-sans font-bold text-gray-400 uppercase tracking-normal block">
+                Department Focus
+              </span>
+              <span className="text-[13px] font-sans font-medium text-gray-700 block mt-0.5">
+                Narrow to resources pulled from a specific department site.
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2" id="department-focus-toggles">
+              {availableDepartmentOptions.map((department) => {
+                const isSelected = selectedDepartment === department.value;
+
+                return (
+                  <button
+                    key={department.value}
+                    onClick={() => setSelectedDepartment(department.value)}
+                    className={`px-3 py-2 rounded-md text-xs font-semibold tracking-normal transition-all border cursor-pointer ${
+                      isSelected
+                        ? "bg-gray-950 text-white border-gray-950 shadow-md shadow-gray-900/10"
+                        : "bg-white text-gray-700 hover:bg-gray-100 border-gray-200"
+                    }`}
+                    aria-pressed={isSelected}
+                    id={`department-pill-${department.value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                  >
+                    {department.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <section
@@ -753,14 +877,28 @@ export function ResourceGrid({
               color: activeCategoryStyle.text
             }}
           >
-            {isSearchActive ? "Global Search" : selectedCategoryValue === "all" ? "Directory Overview" : "Category View"}
+            {isSearchActive
+              ? "Global Search"
+              : isDepartmentFiltered
+                ? "Department Focus"
+                : selectedCategoryValue === "all"
+                  ? "Directory Overview"
+                  : "Category View"}
           </span>
           <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-gray-950 tracking-normal">
-            {isSearchActive ? "Search Results" : selectedCategoryDetail.title}
+            {isSearchActive
+              ? "Search Results"
+              : isDepartmentFiltered
+                ? `${selectedDepartmentDetail.label} Resources`
+                : selectedCategoryDetail.title}
           </h2>
           <p className="mt-2 text-sm text-gray-600 leading-relaxed">
             {isSearchActive
-              ? "Searching across the full directory while preserving your opened category."
+              ? isDepartmentFiltered
+                ? `Searching within ${selectedDepartmentDetail.label} resources while preserving your opened category.`
+                : "Searching across the full directory while preserving your opened category."
+              : isDepartmentFiltered
+                ? `Showing direct student task cards and department fallback links for ${selectedDepartmentDetail.label}.`
               : selectedCategoryDetail.description}
           </p>
 
@@ -830,7 +968,7 @@ export function ResourceGrid({
         <span className="text-xs font-sans font-medium text-gray-500">
           {resultsSummary}
         </span>
-        {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all") && (
+        {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all" || isDepartmentFiltered) && (
           <span className="text-[11px] font-sans font-bold tracking-normal uppercase bg-utah-red-soft text-utah-red px-2.5 py-1 rounded-md self-start sm:self-auto">
             Active Filter Set
           </span>
@@ -856,6 +994,28 @@ export function ResourceGrid({
         </div>
       ) : (
         <div id="resources-grouped-results">
+          {topMatches.length > 0 && (
+            <section className="mt-8" id="group-best-matches">
+              <div className="mb-3 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-gray-200 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="h-3 w-3 rounded-sm shrink-0 bg-utah-red"
+                    aria-hidden="true"
+                  />
+                  <h3 className="text-sm sm:text-base font-bold text-gray-950 tracking-normal">
+                    Best Matches
+                  </h3>
+                </div>
+                <span className="text-[11px] font-bold uppercase tracking-normal text-gray-400">
+                  Closest to "{trimmedSearchQuery}"
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid-best-matches">
+                {topMatches.map(renderResourceCard)}
+              </div>
+            </section>
+          )}
           {groupedResources.map(([groupName, groupItems]) => {
             const groupStyle = isKnownCategory(groupName) ? getCategoryStyle(groupName) : activeCategoryStyle;
 
