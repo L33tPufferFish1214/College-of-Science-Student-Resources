@@ -1,40 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "myriad-pro", "Myriad Pro", "Segoe UI", Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-slab: "Plus Jakarta Sans", "Inter", ui-sans-serif, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Sampled live from utah.edu / science.utah.edu computed styles. */
   --color-utah-red: #be0000;
   --color-utah-red-dark: #8c0000;
   --color-utah-red-soft: #f3dddd;
+  --color-utah-black: #000000;
+  --color-utah-char: #1b1b1b;
+  --color-utah-ink: #372c2c;
+  --color-utah-warm: #9d9595;
+  --color-utah-rule: #d5d5d5;
+  --color-utah-shade: #f5f4f2;
   --color-gray-150: #e8e8e8;
   --color-gray-550: #5f6367;
   --color-gray-650: #47494a;
+
+  --radius-ui: 10px;
+  --radius-card: 16px;
+
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
+/* Soft edges: low-specificity so any explicit rounded-* still wins. */
+:where(button, input, select, textarea) { border-radius: var(--radius-ui); }
+:where(article, [class~="border"][class~="bg-white"]) { border-radius: var(--radius-card); overflow: hidden; }
+
 body {
   font-family: var(--font-sans);
-  background-color: #f7f7f5;
-  color: #47494a;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
+  font-size: 17px;
+  line-height: 1.6;
+  background-color: #ffffff;
+  color: var(--color-gray-650);
 }
 
 ::selection {
-  background: #be0000;
+  background: var(--color-utah-red);
   color: #ffffff;
 }
 
-/* Custom soft animations */
+/* One rule covers every interactive element in the app. Scrollbars are left
+   alone on purpose, hiding them removed the only scroll affordance. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-utah-red);
+  outline-offset: 2px;
+}
+
+/* Crimson on black is unreadable, so dark bands flip the ring to white. */
+.on-dark :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: #ffffff;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -42,4 +63,12 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

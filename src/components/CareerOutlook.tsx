@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { CareerOutlook, CAREER_OUTLOOK_DATA } from "../data/resources";
-import { TrendingUp, FileSpreadsheet, MapPin, Sparkles } from "lucide-react";
+import { CAREER_OUTLOOK_DATA, COS_OFFERED_MAJORS } from "../data/resources";
+import { TrendingUp, FileSpreadsheet, MapPin, Sparkles, GraduationCap, BookMarked } from "lucide-react";
 
 export function CareerOutlookVisualizer() {
   const [selectedSector, setSelectedSector] = useState("all");
@@ -37,24 +37,23 @@ export function CareerOutlookVisualizer() {
   }, []);
 
   const formatSalary = (salary: number) => {
-    if (salary >= 200000) return "$208,000+";
     return `$${salary.toLocaleString()}`;
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in" id="careers-panel-wrapper">
+    <div className="animate-fade-in mx-auto max-w-[1240px] px-6 py-12" id="careers-panel-wrapper">
       {/* Intro Header */}
-      <div className="pb-6 border-b border-gray-150/60" id="careers-intro">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-utah-red-soft text-utah-red text-xs font-mono font-bold mb-3.5">
-          <Sparkles className="w-3.5 h-3.5 text-utah-red animate-pulse" />
-          Bureau of Labor Statistics (BLS) National Projections
+      <div className="border-b-2 border-utah-ink pb-6 text-center" id="careers-intro">
+        <div className="mb-4 inline-flex items-center gap-2 bg-utah-red rounded-full px-2.5 py-1.5 font-sans text-[12.5px] font-semibold text-white">
+          <Sparkles className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+          Bureau of Labor Statistics (BLS) Occupational Outlook Handbook, 2025 data and 2025-35 projections
         </div>
-        <h2 className="text-xl sm:text-2xl font-extrabold font-sans text-gray-950 tracking-normal flex items-center gap-2">
+        <h2 className="flex items-center justify-center gap-2.5 font-slab text-[30px] font-bold text-utah-ink">
           <TrendingUp className="w-6 h-6 text-utah-red" />
           Utah Science Career & Salary Roadmap
         </h2>
-        <p className="text-xs sm:text-sm text-gray-600 mt-1.5 leading-relaxed max-w-3xl">
-          Where can your math, chemistry, physics, or biology degree take you? Browse high-paying jobs and fastest-growing industry sectors. Click query triggers below to filter associated resource programs.
+        <p className="mx-auto mt-2 max-w-3xl text-[16px] leading-relaxed text-gray-650">
+          Where can your math, chemistry, physics, or biology degree take you? Browse high-paying jobs and fastest-growing industry sectors. Each job lists the majors the BLS says lead into it, and the ones the College of Science offers are highlighted.
         </p>
       </div>
 
@@ -63,24 +62,24 @@ export function CareerOutlookVisualizer() {
         
         {/* Left Column: Stats Cards & BLS Career Advice */}
         <div className="space-y-6 lg:col-span-1" id="careers-guidelines">
-          <div className="bg-white border border-gray-200 rounded-lg p-6 space-y-4">
-            <h3 className="font-bold text-gray-900 text-sm flex items-center gap-1.5 leading-none">
+          <div className="space-y-4 border border-utah-rule bg-white p-6">
+            <h3 className="flex items-center gap-2 font-slab text-[18px] font-bold leading-none text-utah-ink">
               <FileSpreadsheet className="w-4.5 h-4.5 text-utah-red" />
               How to Leverage Job Statistics
             </h3>
-            <p className="text-xs text-gray-650 leading-relaxed">
+            <p className="text-[15px] leading-relaxed text-gray-650">
               Your science degree constructs core skills in data visualization, quantitative analysis, chemical diagnostics, and structural reasoning. These skills translate directly into high-paying industries.
             </p>
             <div className="pt-2 border-t border-red-100/40 space-y-3.5">
               <div className="flex gap-2">
-                <span className="w-5 h-5 rounded-full bg-utah-red-soft text-utah-red text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-                <p className="text-xs text-gray-650 leading-normal">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center bg-utah-red text-[10px] font-bold text-white">1</span>
+                <p className="text-[14.5px] leading-normal text-gray-650">
                   <strong className="font-bold text-gray-900">High Growth:</strong> Fields with +20% growth rates indicate extremely active hiring markets. Excellent targeting for internship tracks.
                 </p>
               </div>
               <div className="flex gap-2">
-                <span className="w-5 h-5 rounded-full bg-utah-red-soft text-utah-red text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-                <p className="text-xs text-gray-650 leading-normal">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center bg-utah-red text-[10px] font-bold text-white">2</span>
+                <p className="text-[14.5px] leading-normal text-gray-650">
                   <strong className="font-bold text-gray-900">Career Launch Support:</strong> Book appointments with our College of Science peer Career Coaches for interview prep.
                 </p>
               </div>
@@ -90,7 +89,7 @@ export function CareerOutlookVisualizer() {
               href="https://science.utah.edu/career-paths/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 w-full text-center py-2.5 px-4 rounded-md bg-utah-red hover:bg-utah-red-dark text-white text-xs font-bold shadow-md shadow-red-600/15 inline-block transition-all"
+              className="mt-3 inline-block w-full bg-utah-red rounded-full px-4 py-3 text-center font-sans text-[13px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
               id="career-map-link"
             >
               Open Official Career Path Maps
@@ -98,13 +97,13 @@ export function CareerOutlookVisualizer() {
           </div>
 
           {/* Quick-Access Resources Card */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-3">
-            <h4 className="font-bold text-gray-900 text-xs sm:text-sm leading-none flex items-center gap-1.5">
+          <div className="space-y-3 border-l-4 border-utah-red bg-utah-shade p-6">
+            <h4 className="flex items-center gap-2 font-slab text-[18px] font-bold leading-none text-utah-ink">
               <MapPin className="w-4.5 h-4.5 text-utah-red shrink-0" />
               Interview Ready?
             </h4>
-            <p className="text-xs text-gray-650 leading-relaxed">
-              Get free professional headshots on LinkedIn, free tailored suits from the Career Closet, and book high-definition soundproof Zoom rooms inside the Career Studio. Everything is free for Utah College of Science students.
+            <p className="text-[15px] leading-relaxed text-gray-650">
+              Get free professional headshots on LinkedIn, free tailored suits from the Career Closet, and book high-definition soundproof Zoom rooms inside the Career Studio. These three services are free to enrolled students.
             </p>
           </div>
         </div>
@@ -113,15 +112,15 @@ export function CareerOutlookVisualizer() {
         <div className="lg:col-span-2 space-y-6" id="careers-table-board">
           
           {/* Controls Selector Ribbon */}
-          <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-xs flex flex-col sm:flex-row gap-4 justify-between items-center z-13">
+          <div className="flex flex-col items-center justify-between gap-4 border border-utah-rule bg-utah-shade p-5 sm:flex-row">
             {/* Sorting Toggles */}
-            <div className="flex rounded-lg bg-gray-100/80 p-1 w-full sm:w-auto" id="metric-sorting-pills">
+            <div className="flex w-full gap-2.5 sm:w-auto" id="metric-sorting-pills">
               <button
                 onClick={() => setSortByMetric("growth")}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex-1 border-2 rounded-full px-4 py-2.5 font-sans text-[12.5px] font-semibold transition-colors sm:flex-none ${
                   sortByMetric === "growth"
-                    ? "bg-white text-gray-950 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
+                    ? "border-utah-red bg-utah-red text-white"
+                    : "border-utah-rule bg-white text-gray-650 hover:border-utah-red hover:text-utah-red"
                 }`}
                 id="sort-by-growth"
               >
@@ -129,10 +128,10 @@ export function CareerOutlookVisualizer() {
               </button>
               <button
                 onClick={() => setSortByMetric("salary")}
-                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex-1 border-2 rounded-full px-4 py-2.5 font-sans text-[12.5px] font-semibold transition-colors sm:flex-none ${
                   sortByMetric === "salary"
-                    ? "bg-white text-gray-950 shadow-xs"
-                    : "text-gray-500 hover:text-gray-900"
+                    ? "border-utah-red bg-utah-red text-white"
+                    : "border-utah-rule bg-white text-gray-650 hover:border-utah-red hover:text-utah-red"
                 }`}
                 id="sort-by-salary"
               >
@@ -142,11 +141,11 @@ export function CareerOutlookVisualizer() {
 
             {/* Sector filter */}
             <div className="w-full sm:w-56 shrink-0 flex items-center gap-2">
-              <span className="text-xs font-bold text-gray-500 font-mono">Sector:</span>
+              <span className="font-sans text-[12.5px] font-semibold text-utah-warm">Sector:</span>
               <select
                 value={selectedSector}
                 onChange={(e) => setSelectedSector(e.target.value)}
-                className="w-full text-xs sm:text-sm p-2 bg-gray-50 border border-gray-200 rounded-md outline-none focus:border-utah-red transition-colors cursor-pointer text-gray-700 font-semibold"
+                className="w-full border-2 border-utah-rule bg-white p-2.5 text-[14px] font-semibold text-utah-ink transition-colors focus:border-utah-red"
                 id="sector-filter-select"
               >
                 <option value="all">All Sectors</option>
@@ -169,15 +168,15 @@ export function CareerOutlookVisualizer() {
               return (
                 <div 
                   key={`${c.career}-${index}`}
-                  className="bg-white rounded-lg border border-gray-200 hover:border-gray-300 p-5 shadow-xs hover:shadow-md transition-all duration-300"
+                  className="border border-gray-150 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
                   id={`career-item-${index}`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-50">
+                  <div className="flex flex-col justify-between gap-3 border-b border-gray-150 pb-3 sm:flex-row sm:items-center">
                     <div>
-                      <span className="inline-block px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-gray-50 text-gray-500 border border-gray-100 mr-2 uppercase">
+                      <span className="mr-2 inline-block bg-utah-ink rounded-full px-2 py-1 font-sans text-[12px] font-semibold text-white">
                         {c.sector}
                       </span>
-                      <h4 className="font-extrabold text-gray-900 text-sm sm:text-base mt-2 sm:mt-0 inline-block">
+                      <h4 className="mt-2 inline-block font-slab text-[18px] font-bold text-utah-ink sm:mt-0">
                         {c.career}
                       </h4>
                     </div>
@@ -185,33 +184,63 @@ export function CareerOutlookVisualizer() {
                     <div className="flex gap-4 shrink-0 text-left sm:text-right">
                       {/* Metric 1: Salary */}
                       <div>
-                        <span className="text-[10px] text-gray-400 font-mono uppercase block">Median Salary</span>
-                        <span className="text-sm font-extrabold text-gray-900 font-mono">
+                        <span className="block font-sans text-[12.5px] font-semibold text-utah-warm">Median Salary</span>
+                        <span className="font-display text-[22px] font-bold leading-tight text-utah-ink">
                           {formatSalary(c.medianSalary)}
                         </span>
                       </div>
 
                       {/* Metric 2: Growth */}
                       <div>
-                        <span className="text-[10px] text-gray-400 font-mono uppercase block">10-Yr Outlook</span>
-                        <span className="text-sm font-extrabold text-utah-red font-mono flex items-center justify-start sm:justify-end gap-0.5">
+                        <span className="block font-sans text-[12.5px] font-semibold text-utah-warm">10-Yr Outlook</span>
+                        <span className="flex items-center justify-start gap-0.5 font-display text-[22px] font-bold leading-tight text-utah-red sm:justify-end">
                           +{c.growth}%
                         </span>
                       </div>
                     </div>
                   </div>
 
+                  <div className="mt-3.5 flex flex-wrap items-center gap-2" aria-label="Related majors">
+                    <span className="flex items-center gap-1.5 font-sans text-[12.5px] font-semibold text-utah-warm">
+                      <GraduationCap className="h-4 w-4 text-utah-red" aria-hidden="true" />
+                      Related majors:
+                    </span>
+                    {c.majors.map((major) => (
+                      <span
+                        key={major}
+                        className={`rounded-full px-2.5 py-1 font-sans text-[12.5px] font-semibold ${
+                          COS_OFFERED_MAJORS.includes(major)
+                            ? "bg-utah-red text-white"
+                            : "border border-utah-rule bg-white text-gray-650"
+                        }`}
+                      >
+                        {major}
+                      </span>
+                    ))}
+                    <span className="ml-auto font-sans text-[12.5px] text-utah-warm">
+                      Entry: {c.entryEducation} ·{" "}
+                      <a
+                        href={`https://www.bls.gov/ooh/${c.blsPath}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-utah-red underline underline-offset-2"
+                      >
+                        BLS source
+                      </a>
+                    </span>
+                  </div>
+
                   {/* Render interactive bar gauges */}
                   <div className="mt-3.5 space-y-2.5">
                     {/* Salary bar */}
                     <div>
-                      <div className="flex justify-between text-[10px] text-gray-400 font-mono mb-1">
+                      <div className="mb-1 flex justify-between font-sans text-[12.5px] text-utah-warm">
                         <span>Salary Index</span>
-                        <span className="font-semibold text-gray-600">{Math.round(salaryPercentage)}% of Peak BLS</span>
+                        <span className="font-semibold text-utah-ink">{Math.round(salaryPercentage)}% of Peak BLS</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                      <div className="h-2 w-full overflow-hidden bg-gray-150">
                         <div 
-                          className="h-full bg-gray-900 rounded-full transition-all duration-500" 
+                          className="h-full bg-utah-ink transition-all duration-500" 
                           style={{ width: `${salaryPercentage}%` }}
                         />
                       </div>
@@ -219,13 +248,13 @@ export function CareerOutlookVisualizer() {
 
                     {/* Growth bar */}
                     <div>
-                      <div className="flex justify-between text-[10px] text-gray-400 font-mono mb-1">
+                      <div className="mb-1 flex justify-between font-sans text-[12.5px] text-utah-warm">
                         <span>Job Market growth Index</span>
                         <span className="font-semibold text-utah-red">+{c.growth}% growth pace</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                      <div className="h-2 w-full overflow-hidden bg-gray-150">
                         <div 
-                          className="h-full bg-utah-red rounded-full transition-all duration-500" 
+                          className="h-full bg-utah-red transition-all duration-500" 
                           style={{ width: `${growthPercentage}%` }}
                         />
                       </div>
@@ -238,6 +267,23 @@ export function CareerOutlookVisualizer() {
 
         </div>
 
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-utah-rule bg-utah-shade p-6 text-center" id="careers-sources">
+        <BookMarked className="mx-auto mb-2 h-6 w-6 text-utah-red" aria-hidden="true" />
+        <p className="mx-auto max-w-2xl text-[15px] text-gray-650">
+          Pay, growth and major data come from the U.S. Bureau of Labor Statistics Occupational Outlook Handbook. Every
+          figure and the page it came from is documented in the sources README.
+        </p>
+        <a
+          href="https://github.com/L33tPufferFish1214/College-of-Science-Student-Resources/blob/main/docs/career-outlook/README.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-block rounded-full bg-utah-red px-6 py-3 font-sans text-[14px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
+          id="career-sources-link"
+        >
+          View data sources on GitHub
+        </a>
       </div>
     </div>
   );

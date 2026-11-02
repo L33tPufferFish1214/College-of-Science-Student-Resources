@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Version B — U Brand, Utility First</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Zilla+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+/* ===== Version B: U chrome, tool underneath ====================
+   Same masthead, footer, colour, type and square geometry as the
+   official template — but the body is a search tool, not a news
+   page. Photography frames the page; it never sits between a
+   student and a link. */
+
+/* --- Hero: short, photo + scrim, search lives ON it --- */
+.hero {
+  position: relative;
+  background: #1a1a1a url("https://science.utah.edu/wp-content/uploads/2020/12/CollegeofScience_Students-303-scaled.jpg") center 38% / cover no-repeat;
+}
+.hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg, rgba(20,0,0,.86) 0%, rgba(20,0,0,.68) 48%, rgba(0,0,0,.35) 100%);
+}
+.hero .shell { position: relative; z-index: 2; padding-top: 62px; padding-bottom: 62px; }
+.hero .eyebrow { color: #ff9a9a; }
+.hero h1 {
+  font-family: var(--slab); font-weight: 700; color: #fff;
+  font-size: 44px; line-height: 1.12; margin: 12px 0 14px; max-width: 700px;
+}
+.hero .sub { color: rgba(255,255,255,.88); font-size: 17.5px; margin: 0 0 30px; max-width: 620px; }
+
+.searchbox { display: flex; max-width: 780px; box-shadow: 0 10px 34px rgba(0,0,0,.35); }
+.searchbox input {
+  flex: 1; font-family: var(--sans); font-size: 17px;
+  padding: 17px 20px; border: 0; background: #fff; color: var(--ink);
+}
+.searchbox input:focus { outline: 3px solid var(--crimson); outline-offset: -3px; }
+.searchbox .btn { padding: 17px 32px; }
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+.chips span { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.62); align-self: center; margin-right: 4px; }
+.chips a {
+  font-size: 13.5px; color: #fff; text-decoration: none;
+  border: 1px solid rgba(255,255,255,.45); padding: 6px 13px; transition: .15s;
+}
+.chips a:hover { background: #fff; color: var(--crimson); border-color: #fff; }
+
+/* --- Category grid, built on the "Get to Know the U" split panel --- */
+.browse { display: grid; grid-template-columns: 340px 1fr; }
+.browse .panel {
+  background: var(--crimson) url("https://science.utah.edu/wp-content/uploads/2019/05/pattern1.png") repeat;
+  background-blend-mode: soft-light; background-size: 260px;
+  color: #fff; padding: 54px 40px;
+}
+.browse .panel .u {
+  font-family: var(--display); font-size: 74px; font-weight: 700; line-height: .8;
+  color: rgba(255,255,255,.34); margin-bottom: 22px;
+}
+.browse .panel h2 {
+  font-family: var(--display); font-size: 40px; font-weight: 700; line-height: 1;
+  text-transform: uppercase; letter-spacing: .01em; margin: 0 0 16px;
+}
+.browse .panel p { font-size: 15.5px; color: rgba(255,255,255,.9); margin: 0 0 26px; }
+.browse .panel .btn { border-color: #fff; }
+
+.browse .tiles {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  background: var(--rule); gap: 1px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.tile {
+  background: #fff; padding: 26px 24px; text-decoration: none; color: var(--ink);
+  display: flex; flex-direction: column; gap: 6px; transition: .14s;
+}
+.tile:hover { background: #fffafa; box-shadow: inset 4px 0 0 var(--crimson); }
+.tile .n { font-family: var(--display); font-size: 34px; font-weight: 700; line-height: 1; color: var(--crimson); }
+.tile .t { font-family: var(--slab); font-size: 16.5px; font-weight: 600; }
+.tile .c { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+
+/* --- Resource rows: the actual working surface --- */
+.results .rowhead {
+  display: flex; align-items: baseline; gap: 14px;
+  border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 0;
+}
+.results .rowhead h3 { font-family: var(--slab); font-size: 21px; margin: 0; color: var(--ink); }
+.results .rowhead .count { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
+
+.row {
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  padding: 20px 4px; border-bottom: 1px solid var(--rule-soft); text-decoration: none;
+}
+.row:hover { background: #fafafa; box-shadow: inset 4px 0 0 var(--crimson); }
+.row .meta { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
+.row .cat {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #fff; background: var(--ink); padding: 3px 8px;
+}
+.row .cat.red { background: var(--crimson); }
+.row .yr { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.row h4 { font-family: var(--slab); font-size: 18.5px; font-weight: 600; color: var(--ink); margin: 0 0 4px; }
+.row p { margin: 0; font-size: 15px; color: var(--body); }
+.row .go {
+  font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--crimson); white-space: nowrap;
+}
+
+/* --- Featured band: photo used as a band, not per card --- */
+.accel {
+  position: relative;
+  background: #111 url("https://science.utah.edu/wp-content/uploads/2025/11/BioinformaticsWeb-scaled-1.jpg") center / cover no-repeat;
+  background-attachment: fixed;
+}
+.accel::after { content: ""; position: absolute; inset: 0; background: rgba(12,6,6,.84); }
+.accel .shell { position: relative; z-index: 2; }
+.accel .section-head h2 { color: #fff; }
+.accel .section-head p { color: rgba(255,255,255,.82); }
+.accel .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.22); }
+.accel .item { background: rgba(255,255,255,.04); padding: 30px 28px; backdrop-filter: blur(2px); }
+.accel .tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; background: var(--crimson); color: #fff; padding: 5px 10px; margin-bottom: 16px;
+}
+.accel h3 { font-family: var(--slab); font-size: 21px; color: #fff; margin: 0 0 10px; }
+.accel p { font-size: 15px; color: rgba(255,255,255,.8); margin: 0 0 20px; }
+.accel a.more { font-size: 12.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #ff8f8f; text-decoration: none; }
+.accel a.more:hover { color: #fff; }
+
+/* --- Triage band --- */
+.triage { background: var(--shade); }
+.triage .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.triage .q { background: #fff; padding: 26px 22px; text-decoration: none; display: block; transition: .14s; }
+.triage .q:hover { background: var(--crimson); }
+.triage .q:hover strong, .triage .q:hover span { color: #fff; }
+.triage .q strong { font-family: var(--slab); font-size: 17px; color: var(--ink); display: block; margin-bottom: 7px; }
+.triage .q span { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 1080px) {
+  .browse { grid-template-columns: 1fr; }
+  .browse .tiles { grid-template-columns: repeat(2, 1fr); border-left: 1px solid var(--rule); }
+  .accel .grid, .triage .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .hero h1 { font-size: 30px; }
+  .searchbox { flex-direction: column; }
+  .browse .tiles, .accel .grid, .triage .grid { grid-template-columns: 1fr; }
+  .row { grid-template-columns: 1fr; gap: 10px; }
+  .accel { background-attachment: scroll; }
+}
+</style>
+</head>
+<body>
+
+<div class="mockup-flag">Mockup <b>Version B</b> — “U Brand, Utility First”: official chrome, search tool underneath. Static preview, links inert, per-category counts illustrative.</div>
+
+<!-- =============== MASTHEAD =============== -->
+<header class="masthead">
+  <div class="shell">
+    <a class="brand" href="#">
+      <img src="https://science.utah.edu/wp-content/themes/umctheme3/img/uu-logo-hrz.png" alt="The University of Utah" referrerpolicy="no-referrer">
+      <span class="divider"></span>
+      <span class="unit">College of Science</span>
+    </a>
+    <nav class="mastnav">
+      <a href="#" aria-current="page">Home</a>
+      <a href="#">Full Directory</a>
+      <a href="#">Advising</a>
+      <a href="#">Career Outlook</a>
+      <a href="#">Feeling Lost?</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =============== HERO + SEARCH =============== -->
+<section class="hero">
+  <div class="shell">
+    <span class="eyebrow">Student Resource Guide</span>
+    <h1>Every resource, one search box.</h1>
+    <p class="sub">241 advising, tutoring, scholarship, research and wellness resources for College of Science students — collected from across campus so you don’t have to hunt.</p>
+    <form class="searchbox" onsubmit="return false">
+      <input type="search" placeholder="Search scholarships, tutoring, advising, internships…" aria-label="Search resources">
+      <button class="btn btn-red" type="submit">Search</button>
+    </form>
+    <div class="chips">
+      <span>Popular</span>
+      <a href="#">Permission code</a>
+      <a href="#">Free tutoring</a>
+      <a href="#">Summer research</a>
+      <a href="#">Food pantry</a>
+      <a href="#">Counseling</a>
+      <a href="#">Emergency funds</a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== BROWSE BY NEED =============== -->
+<section class="browse">
+  <div class="panel">
+    <div class="u">U</div>
+    <h2>Browse by<br>what you need</h2>
+    <p>Eleven categories, every entry checked against the official College of Science and campus pages.</p>
+    <a class="btn btn-ghost" href="#">Open full directory</a>
+  </div>
+  <div class="tiles">
+    <a class="tile" href="#"><span class="n">31</span><span class="t">Academic Help</span><span class="c">Tutoring centers, study skills, writing</span></a>
+    <a class="tile" href="#"><span class="n">24</span><span class="t">Scholarships &amp; Aid</span><span class="c">Awards, FAFSA, emergency funds</span></a>
+    <a class="tile" href="#"><span class="n">22</span><span class="t">Research &amp; Internships</span><span class="c">Labs, stipends, symposia</span></a>
+    <a class="tile" href="#"><span class="n">19</span><span class="t">Advising &amp; Planning</span><span class="c">Advisors, permission codes, degree maps</span></a>
+    <a class="tile" href="#"><span class="n">18</span><span class="t">Career Development</span><span class="c">Handshake, coaching, résumés</span></a>
+    <a class="tile" href="#"><span class="n">17</span><span class="t">Wellness &amp; Counseling</span><span class="c">Therapy, crisis lines, recreation</span></a>
+    <a class="tile" href="#"><span class="n">16</span><span class="t">Community &amp; Orgs</span><span class="c">Clubs, identity centers, events</span></a>
+    <a class="tile" href="#"><span class="n">15</span><span class="t">Campus Life &amp; Safety</span><span class="c">Housing, food, transport, SafeU</span></a>
+    <a class="tile" href="#"><span class="n">9</span><span class="t">Department Hubs</span><span class="c">Biology, Chemistry, Math, Physics…</span></a>
+  </div>
+</section>
+
+<!-- =============== RESULTS PREVIEW =============== -->
+<section class="section results">
+  <div class="shell">
+    <div class="rowhead">
+      <h3>Most used this term</h3>
+      <span class="count">9 of 241 resources</span>
+    </div>
+
+    <a class="row" href="#">
+      <div>
+        <div class="meta"><span class="cat red">Research</span><span class="yr">First &amp; second year</span></div>
+        <h4>Science Research Initiative (SRI)</h4>
+        <p>Placement in a working faculty lab from your first year. No prior research experience required.</p>
+      </div>
+      <span class="go">Visit ↗</span>
+    </a>
+
+    <a class="row" href="#">
+      <div>
+        <div class="meta"><span class="cat">Advising</span><span class="yr">All levels</span></div>
+        <h4>Permission Code Requests</h4>
+        <p>How to get into a closed or restricted science course, by department, with the current request form.</p>
+      </div>
+      <span class="go">Visit ↗</span>
+    </a>
+
+    <a class="row" href="#">
+      <div>
+        <div class="meta"><span class="cat">Academic Help</span><span class="yr">All levels</span></div>
+        <h4>Mathematics Tutoring Center</h4>
+        <p>Free drop-in tutoring for lower-division math in the T. Benny Rushing Center. No appointment needed.</p>
+      </div>
+      <span class="go">Visit ↗</span>
+    </a>
+
+    <a class="row" href="#">
+      <div>
+        <div class="meta"><span class="cat red">Scholarships</span><span class="yr">All levels</span></div>
+        <h4>ScholarshipUniverse</h4>
+        <p>One application that matches you with eligible U and external scholarships. Renew your profile each year.</p>
+      </div>
+      <span class="go">Visit ↗</span>
+    </a>
+
+    <a class="row" href="#">
+      <div>
+        <div class="meta"><span class="cat">Wellness</span><span class="yr">All levels</span></div>
+        <h4>University Counseling Center</h4>
+        <p>Individual and group therapy, crisis appointments and a 24/7 line for enrolled students.</p>
+      </div>
+      <span class="go">Visit ↗</span>
+    </a>
+
+    <div style="margin-top:34px;text-align:center">
+      <a class="btn btn-outline" href="#">See all 241 resources</a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== ACCELERATORS =============== -->
+<section class="section accel">
+  <div class="shell">
+    <div class="section-head">
+      <h2>Career Accelerators</h2>
+      <div class="rule"></div>
+      <p>Three College of Science programs worth putting a deadline in your calendar for.</p>
+    </div>
+    <div class="grid">
+      <div class="item">
+        <span class="tag">Research from day one</span>
+        <h3>Science Research Initiative</h3>
+        <p>Join a working lab with a faculty mentor in your first year. No prior research experience required.</p>
+        <a class="more" href="#">Search SRI resources →</a>
+      </div>
+      <div class="item">
+        <span class="tag">$21,000 stipend</span>
+        <h3>Beckman Scholars Program</h3>
+        <p>A 15-month mentored research scholarship in biology or chemistry, with stipend and travel funds.</p>
+        <a class="more" href="#">Search Beckman resources →</a>
+      </div>
+      <div class="item">
+        <span class="tag">800+ alumni</span>
+        <h3>ACCESS Scholars Program</h3>
+        <p>A first-year STEM cohort with a tuition award, lab placement and multi-year mentorship.</p>
+        <a class="more" href="#">Search ACCESS resources →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== TRIAGE =============== -->
+<section class="section triage">
+  <div class="shell">
+    <div class="section-head">
+      <h2>Not sure what you need?</h2>
+      <div class="rule"></div>
+      <p>Pick whichever is closest. Each one goes straight to the office that handles it.</p>
+    </div>
+    <div class="grid">
+      <a class="q" href="#"><strong>I’m behind in a class</strong><span>Tutoring, withdrawal deadlines, incompletes</span></a>
+      <a class="q" href="#"><strong>I’m out of money</strong><span>Emergency funds, food pantry, aid appeals</span></a>
+      <a class="q" href="#"><strong>I can’t register</strong><span>Permission codes, holds, advisor contacts</span></a>
+      <a class="q" href="#"><strong>I’m not coping</strong><span>Counseling, crisis lines, wellness coaching</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== FOOTER =============== -->
+<footer class="usite-footer">
+  <div class="shell">
+    <div class="cols">
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Full directory</a></li>
+          <li><a href="#">Academic help</a></li>
+          <li><a href="#">Scholarships</a></li>
+          <li><a href="#">Research</a></li>
+          <li><a href="#">Wellness</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Departments</h4>
+        <ul>
+          <li><a href="#">Biology</a></li>
+          <li><a href="#">Chemistry</a></li>
+          <li><a href="#">Mathematics</a></li>
+          <li><a href="#">Physics &amp; Astronomy</a></li>
+          <li><a href="#">Earth Sciences</a></li>
+        </ul>
+      </div>
+      <div class="lockup">
+        <img src="https://science.utah.edu/wp-content/themes/umctheme3/img/uu-institutional.png" alt="University of Utah" referrerpolicy="no-referrer">
+        <address>1430 Presidents Circle<br>Salt Lake City, UT 84112<br>801-581-6958</address>
+      </div>
+      <div>
+        <h4>Official Pages</h4>
+        <ul>
+          <li><a href="#">science.utah.edu</a></li>
+          <li><a href="#">Academic advising</a></li>
+          <li><a href="#">Financial aid</a></li>
+          <li><a href="#">Counseling center</a></li>
+          <li><a href="#">Career success</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Urgent</h4>
+        <ul>
+          <li><a href="#">Crisis line 988</a></li>
+          <li><a href="#">SafeU</a></li>
+          <li><a href="#">Feed U Pantry</a></li>
+          <li><a href="#">Emergency funds</a></li>
+          <li><a href="#">Campus police</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="baseline">
+      An independent student project — not an official University of Utah website. Always confirm deadlines and policies on the official page.<br>
+      <a href="#">About this guide</a> · <a href="#">Suggest a resource</a> · <a href="#">Accessibility</a> · Last updated September 2026
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

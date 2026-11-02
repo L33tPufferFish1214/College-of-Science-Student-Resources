@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Version C — Crimson Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Zilla+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shared.css">
+<style>
+/* ===== Version C: Crimson Editorial ============================
+   The U's boldest register — the "ON THE RISE!" split panel from
+   utah.edu, scaled up into the organising device for the whole
+   page. Full-bleed alternating crimson and photo bands, oversized
+   condensed display type, edge-to-edge layout. */
+
+body { background: var(--paper); }
+
+/* --- Split hero: crimson panel + photo --- */
+.chero { display: grid; grid-template-columns: 46% 54%; min-height: 560px; }
+.chero .left {
+  background: var(--crimson) url("https://science.utah.edu/wp-content/uploads/2019/05/pattern1.png") repeat;
+  background-blend-mode: soft-light; background-size: 300px;
+  color: #fff; display: flex; flex-direction: column; justify-content: center;
+  padding: 64px 56px 64px max(24px, calc((100vw - var(--shell)) / 2 + 24px));
+}
+.chero .mark {
+  font-family: var(--display); font-size: 96px; font-weight: 800; line-height: .72;
+  color: rgba(255,255,255,.3); margin-bottom: 26px;
+}
+.chero h1 {
+  font-family: var(--display); font-weight: 800; text-transform: uppercase;
+  font-size: 72px; line-height: .92; letter-spacing: -.005em; margin: 0 0 22px;
+}
+.chero h1 em { font-style: normal; color: #ffd7d7; display: block; }
+.chero p { font-size: 18px; color: rgba(255,255,255,.93); margin: 0 0 32px; max-width: 460px; }
+.chero .right {
+  background: #111 url("https://science.utah.edu/wp-content/uploads/2019/09/2000x1333-Students-ChemLab-E.jpg") center / cover no-repeat;
+  position: relative;
+}
+.chero .right::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(190,0,0,.28) 0%, rgba(0,0,0,0) 40%);
+}
+
+/* --- Search bar sits on the seam, overlapping both bands --- */
+.seam { background: var(--char); padding: 0; }
+.seam .shell { transform: translateY(-34px); }
+.seam form { display: flex; box-shadow: 0 16px 40px rgba(0,0,0,.34); }
+.seam input {
+  flex: 1; font-family: var(--sans); font-size: 18px;
+  padding: 21px 24px; border: 0; background: #fff; color: var(--ink);
+}
+.seam input:focus { outline: 3px solid var(--crimson); outline-offset: -3px; }
+.seam .btn { padding: 21px 40px; font-size: 14px; }
+.seam .under {
+  display: flex; flex-wrap: wrap; gap: 22px; padding: 8px 4px 30px;
+  font-size: 13.5px; color: rgba(255,255,255,.62);
+}
+.seam .under a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.35); }
+.seam .under a:hover { border-bottom-color: var(--crimson); color: #ff9a9a; }
+
+/* --- Oversized numbered category list --- */
+.bigcats { padding: 84px 0; }
+.bigcats .head { display: flex; align-items: flex-end; gap: 28px; margin-bottom: 40px; border-bottom: 3px solid var(--ink); padding-bottom: 18px; }
+.bigcats .head h2 {
+  font-family: var(--display); font-size: 58px; font-weight: 800; text-transform: uppercase;
+  line-height: .9; margin: 0; color: var(--ink);
+}
+.bigcats .head p { margin: 0 0 6px auto; font-size: 15.5px; color: var(--muted); max-width: 300px; text-align: right; }
+.bigcats ol { list-style: none; margin: 0; padding: 0; }
+.bigcats li a {
+  display: grid; grid-template-columns: 86px 1fr auto; align-items: baseline; gap: 26px;
+  padding: 24px 12px; border-bottom: 1px solid var(--rule-soft);
+  text-decoration: none; color: var(--ink); transition: .14s;
+}
+.bigcats li a:hover { background: var(--crimson); color: #fff; padding-left: 26px; }
+.bigcats li a:hover .num, .bigcats li a:hover .desc, .bigcats li a:hover .arrow { color: rgba(255,255,255,.85); }
+.bigcats .num { font-family: var(--display); font-size: 30px; font-weight: 700; color: var(--crimson); }
+.bigcats .name { font-family: var(--display); font-size: 36px; font-weight: 700; text-transform: uppercase; line-height: 1; }
+.bigcats .desc { display: block; font-family: var(--sans); font-size: 14.5px; font-weight: 400; text-transform: none; color: var(--muted); margin-top: 6px; }
+.bigcats .arrow { font-size: 26px; color: var(--rule); }
+
+/* --- Full-bleed photo quote band --- */
+.quoteband {
+  position: relative; min-height: 420px; display: flex; align-items: center;
+  background: #111 url("https://science.utah.edu/wp-content/uploads/2025/11/Crocker-Exterior.jpg") center 60% / cover no-repeat;
+  background-attachment: fixed;
+}
+.quoteband::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.35) 100%); }
+.quoteband .shell { position: relative; z-index: 2; padding-top: 70px; padding-bottom: 70px; }
+.quoteband blockquote {
+  margin: 0; max-width: 720px; color: #fff;
+  font-family: var(--slab); font-size: 34px; line-height: 1.28; font-weight: 600;
+}
+.quoteband cite { display: block; margin-top: 22px; font-family: var(--sans); font-style: normal; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #ff9a9a; }
+
+/* --- Accelerators as stacked editorial rows --- */
+.accelrows { padding: 84px 0; }
+.arow { display: grid; grid-template-columns: 42% 1fr; gap: 0; border-top: 1px solid var(--rule); }
+.arow:last-child { border-bottom: 1px solid var(--rule); }
+.arow .pic { min-height: 280px; background-size: cover; background-position: center; }
+.arow .txt { padding: 44px 0 44px 48px; display: flex; flex-direction: column; justify-content: center; }
+.arow:nth-child(even) .pic { order: 2; }
+.arow:nth-child(even) .txt { padding: 44px 48px 44px 0; }
+.arow .tag {
+  align-self: flex-start; font-size: 10.5px; font-weight: 700; letter-spacing: .13em;
+  text-transform: uppercase; background: var(--crimson); color: #fff; padding: 6px 12px; margin-bottom: 18px;
+}
+.arow h3 { font-family: var(--display); font-size: 42px; font-weight: 700; text-transform: uppercase; line-height: .98; margin: 0 0 14px; color: var(--ink); }
+.arow p { font-size: 16.5px; margin: 0 0 24px; max-width: 520px; }
+.arow .btn { align-self: flex-start; }
+
+/* --- Crimson triage band --- */
+.ctriage { background: var(--crimson); color: #fff; padding: 76px 0; }
+.ctriage h2 { font-family: var(--display); font-size: 52px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px; line-height: .95; }
+.ctriage .lead { font-size: 17.5px; color: rgba(255,255,255,.9); margin: 0 0 38px; max-width: 620px; }
+.ctriage .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,.35); }
+.ctriage .q { background: var(--crimson); padding: 28px 24px; text-decoration: none; display: block; transition: .14s; }
+.ctriage .q:hover { background: #fff; }
+.ctriage .q:hover strong { color: var(--crimson); }
+.ctriage .q:hover span { color: var(--body); }
+.ctriage .q strong { font-family: var(--display); font-size: 25px; font-weight: 700; text-transform: uppercase; color: #fff; display: block; line-height: 1.02; margin-bottom: 9px; }
+.ctriage .q span { font-size: 14px; color: rgba(255,255,255,.82); }
+
+@media (max-width: 1080px) {
+  .chero { grid-template-columns: 1fr; }
+  .chero .left { padding: 54px 24px; }
+  .chero .right { min-height: 300px; }
+  .chero h1 { font-size: 54px; }
+  .arow { grid-template-columns: 1fr; }
+  .arow .pic { min-height: 220px; order: 0 !important; }
+  .arow .txt, .arow:nth-child(even) .txt { padding: 36px 0; }
+  .ctriage .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .chero h1 { font-size: 40px; }
+  .bigcats .head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .bigcats .head h2 { font-size: 38px; }
+  .bigcats .head p { margin: 0; text-align: left; }
+  .bigcats li a { grid-template-columns: 52px 1fr; }
+  .bigcats .name { font-size: 26px; }
+  .bigcats .arrow { display: none; }
+  .seam form { flex-direction: column; }
+  .quoteband { background-attachment: scroll; }
+  .quoteband blockquote { font-size: 24px; }
+  .ctriage .grid { grid-template-columns: 1fr; }
+  .ctriage h2 { font-size: 34px; }
+}
+</style>
+</head>
+<body>
+
+<div class="mockup-flag">Mockup <b>Version C</b> — “Crimson Editorial”: the U’s boldest register, magazine layout. Static preview, links inert, per-category counts illustrative.</div>
+
+<!-- =============== MASTHEAD =============== -->
+<header class="masthead">
+  <div class="shell">
+    <a class="brand" href="#">
+      <img src="https://science.utah.edu/wp-content/themes/umctheme3/img/uu-logo-hrz.png" alt="The University of Utah" referrerpolicy="no-referrer">
+      <span class="divider"></span>
+      <span class="unit">College of Science</span>
+    </a>
+    <nav class="mastnav">
+      <a href="#" aria-current="page">Home</a>
+      <a href="#">Directory</a>
+      <a href="#">Advising</a>
+      <a href="#">Careers</a>
+      <a href="#">Feeling Lost?</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =============== SPLIT HERO =============== -->
+<section class="chero">
+  <div class="left">
+    <div class="mark">U</div>
+    <h1>Find it<br><em>in one place</em></h1>
+    <p>241 advising, tutoring, scholarship, research and wellness resources for College of Science students — gathered from every corner of campus.</p>
+    <a class="btn btn-ghost" href="#" style="align-self:flex-start">Open the directory</a>
+  </div>
+  <div class="right"></div>
+</section>
+
+<!-- =============== SEARCH ON THE SEAM =============== -->
+<div class="seam">
+  <div class="shell">
+    <form onsubmit="return false">
+      <input type="search" placeholder="Search scholarships, tutoring, advising, internships…" aria-label="Search resources">
+      <button class="btn btn-red" type="submit">Search</button>
+    </form>
+    <div class="under">
+      <span>Most searched:</span>
+      <a href="#">Permission code</a>
+      <a href="#">Free tutoring</a>
+      <a href="#">Summer research</a>
+      <a href="#">Food pantry</a>
+      <a href="#">Counseling</a>
+      <a href="#">Emergency funds</a>
+    </div>
+  </div>
+</div>
+
+<!-- =============== BIG CATEGORY LIST =============== -->
+<section class="bigcats">
+  <div class="shell">
+    <div class="head">
+      <h2>Browse<br>by need</h2>
+      <p>Eleven categories, every entry checked against the official campus page.</p>
+    </div>
+    <ol>
+      <li><a href="#"><span class="num">31</span><span><span class="name">Academic Help</span><span class="desc">Tutoring centers, study skills, writing support</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">24</span><span><span class="name">Scholarships &amp; Aid</span><span class="desc">Awards, FAFSA, emergency funds, departmental prizes</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">22</span><span><span class="name">Research &amp; Internships</span><span class="desc">SRI, UROP, SPUR, stipends, symposia</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">19</span><span><span class="name">Advising &amp; Planning</span><span class="desc">Advisors, permission codes, degree maps</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">18</span><span><span class="name">Career Development</span><span class="desc">Handshake, coaching, résumés, career closet</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">17</span><span><span class="name">Wellness &amp; Counseling</span><span class="desc">Therapy, crisis lines, recreation, wellness coaching</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">16</span><span><span class="name">Community &amp; Orgs</span><span class="desc">Clubs, identity centers, events, Campus Connect</span></span><span class="arrow">→</span></a></li>
+      <li><a href="#"><span class="num">15</span><span><span class="name">Campus Life &amp; Safety</span><span class="desc">Housing, food, transport, SafeU</span></span><span class="arrow">→</span></a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- =============== QUOTE BAND =============== -->
+<section class="quoteband">
+  <div class="shell">
+    <blockquote>
+      “Half of what I needed already existed. I just had no idea where to look for it.”
+      <cite>Why this guide exists</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- =============== ACCELERATOR ROWS =============== -->
+<section class="accelrows">
+  <div class="shell">
+    <div class="head" style="margin-bottom:34px">
+      <h2 style="font-family:var(--display);font-size:52px;font-weight:800;text-transform:uppercase;margin:0;color:var(--ink);line-height:.95">Career accelerators</h2>
+    </div>
+    <div class="arow">
+      <div class="pic" style="background-image:url('https://science.utah.edu/wp-content/uploads/2020/09/2000x1333-STOCK-Lab-A.jpg')"></div>
+      <div class="txt">
+        <span class="tag">Research from day one</span>
+        <h3>Science Research Initiative</h3>
+        <p>Join a working faculty lab in your first year. No prior research experience required, and SRI-CAP continues the placement into later years.</p>
+        <a class="btn btn-outline" href="#">Search SRI resources</a>
+      </div>
+    </div>
+    <div class="arow">
+      <div class="pic" style="background-image:url('https://science.utah.edu/wp-content/uploads/2025/11/BioinformaticsWeb-scaled-1.jpg')"></div>
+      <div class="txt">
+        <span class="tag">$21,000 stipend</span>
+        <h3>Beckman Scholars</h3>
+        <p>A 15-month mentored research scholarship in biology or chemistry, with a stipend across two summers and an academic year, plus travel funds.</p>
+        <a class="btn btn-outline" href="#">Search Beckman resources</a>
+      </div>
+    </div>
+    <div class="arow">
+      <div class="pic" style="background-image:url('https://science.utah.edu/wp-content/uploads/2021/01/CollegeofScience_Students-318-scaled.jpg')"></div>
+      <div class="txt">
+        <span class="tag">800+ alumni</span>
+        <h3>ACCESS Scholars</h3>
+        <p>A first-year STEM cohort programme with a tuition award, an early lab placement and mentorship that carries through your degree.</p>
+        <a class="btn btn-outline" href="#">Search ACCESS resources</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== TRIAGE =============== -->
+<section class="ctriage">
+  <div class="shell">
+    <h2>Not sure what<br>you need?</h2>
+    <p class="lead">Pick whichever is closest to how the week is going. Each one goes straight to the office that handles it.</p>
+    <div class="grid">
+      <a class="q" href="#"><strong>I’m behind in a class</strong><span>Tutoring, withdrawal deadlines, incompletes</span></a>
+      <a class="q" href="#"><strong>I’m out of money</strong><span>Emergency funds, food pantry, aid appeals</span></a>
+      <a class="q" href="#"><strong>I can’t register</strong><span>Permission codes, holds, advisor contacts</span></a>
+      <a class="q" href="#"><strong>I’m not coping</strong><span>Counseling, crisis lines, wellness coaching</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== FOOTER =============== -->
+<footer class="usite-footer">
+  <div class="shell">
+    <div class="cols">
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Full directory</a></li>
+          <li><a href="#">Academic help</a></li>
+          <li><a href="#">Scholarships</a></li>
+          <li><a href="#">Research</a></li>
+          <li><a href="#">Wellness</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Departments</h4>
+        <ul>
+          <li><a href="#">Biology</a></li>
+          <li><a href="#">Chemistry</a></li>
+          <li><a href="#">Mathematics</a></li>
+          <li><a href="#">Physics &amp; Astronomy</a></li>
+          <li><a href="#">Earth Sciences</a></li>
+        </ul>
+      </div>
+      <div class="lockup">
+        <img src="https://science.utah.edu/wp-content/themes/umctheme3/img/uu-institutional.png" alt="University of Utah" referrerpolicy="no-referrer">
+        <address>1430 Presidents Circle<br>Salt Lake City, UT 84112<br>801-581-6958</address>
+      </div>
+      <div>
+        <h4>Official Pages</h4>
+        <ul>
+          <li><a href="#">science.utah.edu</a></li>
+          <li><a href="#">Academic advising</a></li>
+          <li><a href="#">Financial aid</a></li>
+          <li><a href="#">Counseling center</a></li>
+          <li><a href="#">Career success</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Urgent</h4>
+        <ul>
+          <li><a href="#">Crisis line 988</a></li>
+          <li><a href="#">SafeU</a></li>
+          <li><a href="#">Feed U Pantry</a></li>
+          <li><a href="#">Emergency funds</a></li>
+          <li><a href="#">Campus police</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="baseline">
+      An independent student project — not an official University of Utah website. Always confirm deadlines and policies on the official page.<br>
+      <a href="#">About this guide</a> · <a href="#">Suggest a resource</a> · <a href="#">Accessibility</a> · Last updated September 2026
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

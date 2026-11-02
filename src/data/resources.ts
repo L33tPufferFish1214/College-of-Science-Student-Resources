@@ -46,11 +46,16 @@ export interface Advisor {
 
 export interface CareerOutlook {
   career: string;
-  medianSalary: number;
-  growth: number; // as percentage, e.g. 33 for 33%
+  medianSalary: number; // BLS median annual pay, May 2025
+  growth: number; // BLS projected 10-year employment growth %, 2025-35
   sector: "Education & Research" | "Healthcare" | "Government" | "Industry";
-  metricType: "growth" | "salary";
+  entryEducation: string; // BLS typical entry-level education
+  majors: string[]; // fields of study the BLS page names for this job
+  blsPath: string; // path under https://www.bls.gov/ooh/
 }
+
+// Majors the College of Science offers directly (science.utah.edu, per department pages).
+export const COS_OFFERED_MAJORS = ["Mathematics", "Biology", "Chemistry", "Physics", "Astronomy", "Physical science"];
 
 export const ADVISOR_DIRECTORY: Advisor[] = [
   { department: "Atmospheric Sciences", advisor: "Marcus Smith", email: "marcus.smith@utah.edu" },
@@ -68,32 +73,25 @@ export const ADVISOR_DIRECTORY: Advisor[] = [
 ];
 
 export const CAREER_OUTLOOK_DATA: CareerOutlook[] = [
-  // Highest Job Growth (10-Year Outlook)
-  { career: "Mathematician", medianSalary: 110860, growth: 33, sector: "Education & Research", metricType: "growth" },
-  { career: "Healthcare Administration", medianSalary: 104280, growth: 32, sector: "Healthcare", metricType: "growth" },
-  { career: "Epidemiologist", medianSalary: 74560, growth: 30, sector: "Government", metricType: "growth" },
-  { career: "Data Scientist", medianSalary: 98230, growth: 28, sector: "Industry", metricType: "growth" },
-  { career: "Actuary", medianSalary: 111030, growth: 24, sector: "Industry", metricType: "growth" },
-  { career: "Software Engineer", medianSalary: 110140, growth: 22, sector: "Industry", metricType: "growth" },
-  { career: "Physical Therapist", medianSalary: 91010, growth: 21, sector: "Healthcare", metricType: "growth" },
-  { career: "Medical Scientist", medianSalary: 91510, growth: 17, sector: "Healthcare", metricType: "growth" },
-  { career: "Veterinarian", medianSalary: 99250, growth: 17, sector: "Healthcare", metricType: "growth" },
-  { career: "Forensic Scientist", medianSalary: 60590, growth: 16, sector: "Government", metricType: "growth" },
-  { career: "Industrial Engineer", medianSalary: 88950, growth: 14, sector: "Industry", metricType: "growth" },
-  { career: "Pilot", medianSalary: 160970, growth: 13, sector: "Industry", metricType: "growth" },
-
-  // Highest Median Salaries
-  { career: "Medical Doctor / Orthodontist", medianSalary: 208000, growth: 5, sector: "Healthcare", metricType: "salary" },
-  { career: "Pilot (Advanced Seat)", medianSalary: 160970, growth: 13, sector: "Industry", metricType: "salary" },
-  { career: "Lab Manager", medianSalary: 137940, growth: 6, sector: "Education & Research", metricType: "salary" },
-  { career: "Lawyer", medianSalary: 126930, growth: 9, sector: "Industry", metricType: "salary" },
-  { career: "Physicist", medianSalary: 129850, growth: 8, sector: "Education & Research", metricType: "salary" },
-  { career: "Astronomer", medianSalary: 119730, growth: 8, sector: "Education & Research", metricType: "salary" },
-  { career: "Aerospace Engineer", medianSalary: 118610, growth: 8, sector: "Industry", metricType: "salary" },
-  { career: "Optometrist", medianSalary: 118050, growth: 9, sector: "Healthcare", metricType: "salary" },
-  { career: "Chemical Engineer", medianSalary: 108540, growth: 9, sector: "Industry", metricType: "salary" },
-  { career: "Actuary (High Tenure)", medianSalary: 111030, growth: 24, sector: "Industry", metricType: "salary" },
-  { career: "Software Lead", medianSalary: 110140, growth: 22, sector: "Industry", metricType: "salary" }
+  {career: "Data Scientist", medianSalary: 120230, growth: 35, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Mathematics", "Statistics", "Computer science", "Business", "Engineering"], blsPath: "math/data-scientists.htm"},
+  {career: "Medical & Health Services Manager", medianSalary: 123860, growth: 24, sector: "Healthcare", entryEducation: "Bachelor's degree", majors: ["Health administration", "Nursing", "Business", "Health information management"], blsPath: "management/medical-and-health-services-managers.htm"},
+  {career: "Epidemiologist", medianSalary: 87220, growth: 19, sector: "Government", entryEducation: "Master's degree", majors: ["Public health", "Biology", "Public policy", "Social science"], blsPath: "life-physical-and-social-science/epidemiologists.htm"},
+  {career: "Medical Scientist", medianSalary: 103410, growth: 13, sector: "Healthcare", entryEducation: "Doctoral or professional degree", majors: ["Biology", "Chemistry", "Physical science"], blsPath: "life-physical-and-social-science/medical-scientists.htm"},
+  {career: "Forensic Science Technician", medianSalary: 72060, growth: 13, sector: "Government", entryEducation: "Bachelor's degree", majors: ["Physical science", "Biology", "Forensic science"], blsPath: "life-physical-and-social-science/forensic-science-technicians.htm"},
+  {career: "Physical Therapist", medianSalary: 102760, growth: 12, sector: "Healthcare", entryEducation: "Doctoral or professional degree", majors: ["Healthcare fields", "Recreation & fitness", "Biology", "Chemistry", "Physics"], blsPath: "healthcare/physical-therapists.htm"},
+  {career: "Industrial Engineer", medianSalary: 102440, growth: 12, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Industrial engineering", "Mechanical engineering", "Electrical engineering"], blsPath: "architecture-and-engineering/industrial-engineers.htm"},
+  {career: "Mathematician & Statistician", medianSalary: 105720, growth: 10, sector: "Education & Research", entryEducation: "Master's degree", majors: ["Mathematics", "Statistics", "Computer science", "Physics"], blsPath: "math/mathematicians-and-statisticians.htm"},
+  {career: "Software Developer", medianSalary: 134040, growth: 10, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Computer science", "Engineering", "Mathematics"], blsPath: "computer-and-information-technology/software-developers.htm"},
+  {career: "Optometrist", medianSalary: 136570, growth: 10, sector: "Healthcare", entryEducation: "Doctoral or professional degree", majors: ["Biology", "Physical science", "Chemistry", "Physics"], blsPath: "healthcare/optometrists.htm"},
+  {career: "Actuary", medianSalary: 130000, growth: 9, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Mathematics", "Actuarial science", "Statistics", "Business"], blsPath: "math/actuaries.htm"},
+  {career: "Veterinarian", medianSalary: 130100, growth: 9, sector: "Healthcare", entryEducation: "Doctoral or professional degree", majors: ["Biology", "Chemistry", "Agriculture"], blsPath: "healthcare/veterinarians.htm"},
+  {career: "Aerospace Engineer", medianSalary: 134960, growth: 8, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Aerospace engineering", "Engineering"], blsPath: "architecture-and-engineering/aerospace-engineers.htm"},
+  {career: "Natural Sciences Manager", medianSalary: 167220, growth: 8, sector: "Education & Research", entryEducation: "Bachelor's degree", majors: ["Biology", "Chemistry", "Physics", "Mathematics", "Psychology"], blsPath: "management/natural-sciences-managers.htm"},
+  {career: "Pilot", medianSalary: 210020, growth: 7, sector: "Industry", entryEducation: "Bachelor's degree (airline pilots)", majors: ["Any field", "Engineering", "Business", "Transportation"], blsPath: "transportation-and-material-moving/airline-and-commercial-pilots.htm"},
+  {career: "Physicist & Astronomer", medianSalary: 166880, growth: 7, sector: "Education & Research", entryEducation: "Doctoral or professional degree", majors: ["Physics", "Astronomy", "Mathematics", "Computer science", "Engineering"], blsPath: "life-physical-and-social-science/physicists-and-astronomers.htm"},
+  {career: "Chemical Engineer", medianSalary: 125040, growth: 5, sector: "Industry", entryEducation: "Bachelor's degree", majors: ["Chemical engineering"], blsPath: "architecture-and-engineering/chemical-engineers.htm"},
+  {career: "Lawyer", medianSalary: 159670, growth: 5, sector: "Industry", entryEducation: "Doctoral or professional degree", majors: ["Any field", "History", "Social science", "Legal studies"], blsPath: "legal/lawyers.htm"},
+  {career: "Physician & Surgeon", medianSalary: 275930, growth: 4, sector: "Healthcare", entryEducation: "Doctoral or professional degree", majors: ["Biology", "Physical science", "Healthcare fields"], blsPath: "healthcare/physicians-and-surgeons.htm"}
 ];
 
 const ATMOS_HOME_URL = "https://atmos.utah.edu/";
@@ -3333,7 +3331,7 @@ export const RESOURCES_DATA: Resource[] = [
   // Career Launch Tools (Tier 2-specific coaching)
   {
     id: "career-coaching-hub",
-    name: "Career Coaching — Full Hub",
+    name: "Career Coaching: Full Hub",
     description: "Schedule custom target sessions for final resume styling, CV review, LinkedIn outreach, technical mock interviews, and sector job alignment.",
     url: "https://science.utah.edu/students/careercoaching/",
     category: "Career Development",
@@ -3668,7 +3666,7 @@ export const RESOURCES_DATA: Resource[] = [
   // --- VOLUNTEERING, WELLNESS & FORMS (site audit additions) ---
   {
     id: "bennion-center-students",
-    name: "Bennion Center — Volunteering & Community Engagement",
+    name: "Bennion Center: Volunteering & Community Engagement",
     description: "Everything volunteering-related lives on this one page: 40+ community partner programs, the no-commitment Service Corner, Utah Reads paid tutoring, Bennion Scholars, service-themed housing (incl. the H.I.V.E.), and community-engaged learning courses.",
     url: "https://bennioncenter.utah.edu/students/index.php",
     category: "Community & Student Orgs",
@@ -3678,7 +3676,7 @@ export const RESOURCES_DATA: Resource[] = [
   {
     id: "bennion-volunteer-interest-form",
     name: "Volunteer Interest Form (Bennion Center)",
-    description: "The actual sign-up form to get matched with Bennion Center volunteer programs — the real starting point for most community partnerships.",
+    description: "The actual sign-up form to get matched with Bennion Center volunteer programs, the real starting point for most community partnerships.",
     url: "https://bennioncenter.utah.edu/vif/index.php",
     category: "Community & Student Orgs",
     tier: "all",
@@ -3715,7 +3713,7 @@ export const RESOURCES_DATA: Resource[] = [
   {
     id: "center-for-campus-wellness",
     name: "Center for Campus Wellness",
-    description: "Umbrella wellness office — one page links out to alcohol & substance support, wellness coaching, health education, sexual wellness (free safer-sex supplies), spiritual wellness, and confidential violence/harm advocacy.",
+    description: "Umbrella wellness office, one page links out to alcohol & substance support, wellness coaching, health education, sexual wellness (free safer-sex supplies), spiritual wellness, and confidential violence/harm advocacy.",
     url: "https://wellness.utah.edu/programs/",
     category: "Wellness & Mental Health",
     tier: "all",
@@ -3733,7 +3731,7 @@ export const RESOURCES_DATA: Resource[] = [
   {
     id: "permission-code-requests",
     name: "Permission Numbers Request Sites",
-    description: "Registrar-maintained directory linking to every department's own permission code / override request form and contact — Mines & Earth, Kinesiology, Writing, Computer Science, and more, all in one place.",
+    description: "Registrar-maintained directory linking to every department's own permission code / override request form and contact, Mines & Earth, Kinesiology, Writing, Computer Science, and more, all in one place.",
     url: "https://registrar.utah.edu/register/permission-numbers-requests.php",
     category: "Advising & Course Planning",
     tier: "all",

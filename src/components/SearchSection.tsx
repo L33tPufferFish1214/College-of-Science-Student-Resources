@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, ChevronRight } from "lucide-react";
-import uOfULogo from "../assets/images/regenerated_image_1779306578444.png";
+import { Search, X, ChevronRight, ChevronLeft } from "lucide-react";
+import { IMAGES } from "../data/images";
 import { RESOURCES_DATA, type Resource } from "../data/resources";
 import { createResourceSearch } from "../lib/search";
 
@@ -8,12 +8,66 @@ interface SearchSectionProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onPopularSelect: (category: string) => void;
+  onCategorySelect: (category: string) => void;
   setActiveView: (view: string) => void;
 }
 
-export function SearchSection({ searchQuery, setSearchQuery, onPopularSelect, setActiveView }: SearchSectionProps) {
+type Slide = {
+  image: string;
+  heading: string;
+  body: string;
+  cta: string;
+  category?: string;
+};
+
+// Counted from the data so the headline can never advertise a stale number.
+const RESOURCE_COUNT = RESOURCES_DATA.length;
+
+const SLIDES: Slide[] = [
+  {
+    image: IMAGES.studentsChemLab,
+    heading: "Every resource, one place.",
+    body: `${RESOURCE_COUNT} advising, tutoring, scholarship, research and wellness resources for College of Science students, collected and kept current.`,
+    cta: "Browse the directory"
+  },
+  {
+    image: IMAGES.bioinformatics,
+    heading: "Start research in your first year.",
+    body: "SRI, UROP and SPUR place undergraduates in working labs. No prior experience required.",
+    cta: "Browse research resources",
+    category: "Research & Internships"
+  },
+  {
+    image: IMAGES.crockerExterior,
+    heading: "Money you haven’t applied for yet.",
+    body: "ScholarshipUniverse, ACCESS Scholars, Beckman and every departmental award, in one list.",
+    cta: "Browse scholarships",
+    category: "Scholarships & Financial Aid"
+  }
+];
+
+const POPULAR_SEARCHES = [
+  "permission code",
+  "free tutoring",
+  "summer research",
+  "food pantry",
+  "counseling",
+  "emergency funds"
+];
+
+const SLIDE_MS = 6000;
+
+export function SearchSection({
+  searchQuery,
+  setSearchQuery,
+  onPopularSelect,
+  onCategorySelect,
+  setActiveView
+}: SearchSectionProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState<Resource[]>([]);
+  const [slide, setSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fuse = useMemo(() => createResourceSearch(RESOURCES_DATA), []);
 
@@ -30,102 +84,200 @@ export function SearchSection({ searchQuery, setSearchQuery, onPopularSelect, se
     return () => clearTimeout(timer);
   }, [searchQuery, fuse]);
 
-  // Clear search safely
+  // Auto-advance, but never against a reduced-motion preference and never while
+  // the student is hovering or tabbing through the hero.
+  useEffect(() => {
+    if (isPaused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setInterval(() => setSlide((n) => (n + 1) % SLIDES.length), SLIDE_MS);
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
   const handleClear = () => {
     setSearchQuery("");
     inputRef.current?.focus();
   };
 
+  const handleSlideCta = (item: Slide) => {
+    if (item.category) {
+      onCategorySelect(item.category);
+    } else {
+      setActiveView("resources");
+    }
+  };
+
+  const active = SLIDES[slide];
+
   return (
-    <div className="relative py-12 md:py-16 text-center px-4 bg-white border-b border-gray-200" id="search-section-wrapper">
-      <div className="max-w-3xl mx-auto">
-        {/* Centered Brand Lockup matching the official College of Science logo */}
-        <div className="flex flex-col items-center justify-center mb-8 select-none animate-fade-in" id="center-brand-lockup">
-          <img 
-            src={uOfULogo} 
-            alt="The University of Utah Logo" 
-            className="w-auto hover:scale-102 transition-transform duration-300 h-[112px] mb-[-28px]"
-            referrerPolicy="no-referrer"
-          />
-          <div className="w-24 sm:w-28 border-t-2 border-utah-red mt-3.5 mb-2.5" />
-          <span className="text-xl sm:text-2xl font-light text-gray-800 uppercase font-sans tracking-normal">
-            College of Science
-          </span>
+    <>
+      {/* Full-bleed hero carousel, the U template's signature opening block */}
+      <section
+        className="on-dark relative h-[420px] overflow-hidden bg-utah-char sm:h-[520px] lg:h-[560px]"
+        id="hero-carousel"
+        aria-roledescription="carousel"
+        aria-label="Featured resources"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocusCapture={() => setIsPaused(true)}
+        onBlurCapture={() => setIsPaused(false)}
+      >
+        {SLIDES.map((item, index) => (
+          <div
+            key={item.heading}
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
+              index === slide ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+            style={{ backgroundImage: `url("${item.image}")` }}
+            aria-hidden={index !== slide}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-black/25 to-black/60" />
+          </div>
+        ))}
+
+        <div className="relative z-10 flex h-full items-center justify-center px-6">
+          <div className="max-w-3xl text-center">
+            <h1
+              className="font-slab text-[34px] font-bold leading-[1.08] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)] sm:text-[44px] lg:text-[54px]"
+              id="hero-headline"
+            >
+              {active.heading}
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-[16px] text-white/90 drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)] sm:text-[18px]">
+              {active.body}
+            </p>
+            <button
+              type="button"
+              onClick={() => handleSlideCta(active)}
+              className="mt-7 bg-utah-red rounded-full px-7 py-3.5 font-sans text-[13px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
+              id="hero-cta"
+            >
+              {active.cta}
+            </button>
+          </div>
         </div>
 
-        {/* Hero Headline */}
-        <h1 className="text-[27px] leading-[33px] font-bold text-gray-950 tracking-normal animate-fade-in" id="hero-headline">
-          Find the support, opportunities, and resources you need to succeed.
-        </h1>
+        <button
+          type="button"
+          onClick={() => setSlide((n) => (n - 1 + SLIDES.length) % SLIDES.length)}
+          className="absolute left-1 top-1/2 z-20 -translate-y-1/2 px-4 py-2 text-4xl leading-none text-white/75 transition-opacity hover:text-white"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="h-8 w-8" />
+        </button>
+        <button
+          type="button"
+          onClick={() => setSlide((n) => (n + 1) % SLIDES.length)}
+          className="absolute right-1 top-1/2 z-20 -translate-y-1/2 px-4 py-2 text-4xl leading-none text-white/75 transition-opacity hover:text-white"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="h-8 w-8" />
+        </button>
 
-        {/* The Search Bar Box - Centerpiece */}
-        <div className="mt-8 relative" id="search-bar-outer">
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              setActiveView("resources");
-            }}
-            className={`flex items-center bg-white rounded-lg shadow-lg border transition-all duration-350 pl-4 pr-2 py-2 ${
-              isFocused 
-                ? "border-utah-red ring-4 ring-utah-red-soft scale-[1.01]" 
-                : "border-gray-200/80 hover:border-gray-300"
-            }`}
-          >
-            <Search className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 shrink-0 select-none mr-3" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-              placeholder="Search scholarships, tutoring, advising, internships, wellness support..."
-              className="w-full text-sm sm:text-base outline-none bg-transparent text-gray-900 placeholder-gray-400 font-normal leading-relaxed text-left"
-              id="global-search-input"
-            />
-            {searchQuery && (
-              <button 
-                type="button"
-                onClick={handleClear}
-                className="p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors mr-1 shrink-0 cursor-pointer"
-                id="search-clear-button"
-              >
-                <X className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-            )}
+        <div className="absolute inset-x-0 bottom-7 z-20 flex justify-center gap-2.5">
+          {SLIDES.map((item, index) => (
             <button
-              type="submit"
-              className="px-4.5 py-2 bg-utah-red hover:bg-utah-red-dark text-white font-bold text-xs sm:text-sm rounded-md transition-all shadow-sm active:scale-95 cursor-pointer ml-1.5 shrink-0 uppercase tracking-normal"
-              id="search-submit-button"
-            >
-              Search
-            </button>
-          </form>
+              key={item.heading}
+              type="button"
+              onClick={() => setSlide(index)}
+              aria-label={`Show slide ${index + 1}: ${item.heading}`}
+              aria-current={index === slide}
+              className={`h-1 w-11 transition-colors ${
+                index === slide ? "bg-utah-red" : "bg-white/45 hover:bg-white/70"
+              }`}
+            />
+          ))}
+        </div>
+      </section>
 
-          {isFocused && searchQuery.trim() !== "" && suggestions.length > 0 && (
-            <div
-              className="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-20 text-left"
-              id="live-search-suggestions"
+      {/* Search band sits immediately under the hero, above every other section */}
+      <div className="border-b border-utah-rule bg-utah-shade py-8" id="search-section-wrapper">
+        <div className="mx-auto max-w-[860px] px-6">
+          <div className="relative">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                setActiveView("resources");
+              }}
+              className="flex flex-col sm:flex-row"
             >
-              {suggestions.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => onPopularSelect(item.name)}
-                  className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-utah-red-soft/40 transition-colors cursor-pointer border-b border-gray-100 last:border-0"
-                  id={`live-suggestion-${item.id}`}
-                >
-                  <span className="min-w-0 flex-1 flex flex-col items-start text-left">
-                    <span className="w-full text-sm font-semibold text-gray-950 truncate">{item.name}</span>
-                    <span className="w-full text-[11px] text-gray-500 truncate">{item.category}</span>
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />
-                </button>
-              ))}
-            </div>
-          )}
+              <div
+                className={`flex flex-1 items-center border-2 bg-white px-4 transition-colors sm:border-r-0 ${
+                  isFocused ? "border-utah-red" : "border-utah-rule"
+                }`}
+              >
+                <Search className="mr-3 h-5 w-5 shrink-0 text-utah-warm" aria-hidden="true" />
+                <input
+                  ref={inputRef}
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+                  placeholder="Search scholarships, tutoring, advising, internships, wellness support…"
+                  className="w-full bg-transparent py-3.5 text-[16px] text-utah-ink outline-none placeholder:text-utah-warm"
+                  aria-label="Search resources"
+                  id="global-search-input"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={handleClear}
+                    className="ml-2 shrink-0 p-1.5 text-utah-warm transition-colors hover:text-utah-ink"
+                    aria-label="Clear search"
+                    id="search-clear-button"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="bg-utah-red rounded-full px-9 py-3.5 font-sans text-[13px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
+                id="search-submit-button"
+              >
+                Search
+              </button>
+            </form>
+
+            {isFocused && searchQuery.trim() !== "" && suggestions.length > 0 && (
+              <div
+                className="absolute inset-x-0 top-full z-30 mt-1 border border-utah-rule bg-white text-left shadow-lg"
+                id="live-search-suggestions"
+              >
+                {suggestions.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => onPopularSelect(item.name)}
+                    className="flex w-full items-center justify-between gap-3 border-b border-gray-150 px-4 py-3 text-left transition-colors last:border-0 hover:bg-utah-shade"
+                    id={`live-suggestion-${item.id}`}
+                  >
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="w-full truncate text-[15px] font-semibold text-utah-ink">{item.name}</span>
+                      <span className="w-full truncate text-[12px] text-utah-warm">{item.category}</span>
+                    </span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-utah-warm" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <p className="mt-3.5 text-center text-[13px] text-utah-warm">
+            <span className="mr-1">Popular:</span>
+            {POPULAR_SEARCHES.map((term) => (
+              <button
+                key={term}
+                type="button"
+                onClick={() => onPopularSelect(term)}
+                className="mx-1.5 text-gray-650 underline underline-offset-4 transition-colors hover:text-utah-red"
+              >
+                {term}
+              </button>
+            ))}
+          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 }

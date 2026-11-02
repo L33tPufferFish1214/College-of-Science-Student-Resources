@@ -55,6 +55,13 @@ const CATEGORIES: CategoryOption[] = [
   { label: "Department Hubs", value: "Department Hubs" }
 ];
 
+// "Tier 1/2" was internal jargon; students read year language.
+const TIER_OPTIONS: { label: string; value: 1 | 2 | "all" }[] = [
+  { label: "All Levels", value: "all" },
+  { label: "First & Second Year", value: 1 },
+  { label: "Upper Division & Grad", value: 2 }
+];
+
 const DEPARTMENT_OPTIONS: DepartmentOption[] = [
   { label: "All Departments", value: "all" },
   { label: "Atmospheric Sciences", value: "Atmospheric Sciences" },
@@ -69,10 +76,10 @@ const DEPARTMENT_OPTIONS: DepartmentOption[] = [
 ];
 
 const ALL_CATEGORY_STYLE = {
-  accent: "#47494A",
-  background: "#F4F4F3",
-  border: "#D9DCDE",
-  text: "#47494A"
+  accent: "#372c2c",
+  background: "#f5f4f2",
+  border: "#d5d5d5",
+  text: "#372c2c"
 };
 
 const CATEGORY_DETAILS: Record<CategoryValue, CategoryDetail> = {
@@ -528,12 +535,11 @@ export function ResourceGrid({
     return (
       <div
         key={item.id}
-        className="rounded-lg border border-gray-200 bg-white hover:border-gray-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group overflow-hidden shadow-xs relative"
-        style={{ borderColor: categoryStyle.border }}
+        className="group relative flex flex-col justify-between overflow-hidden border border-gray-150 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(0,0,0,0.13)]"
         id={`card-${item.id}`}
       >
         <div
-          className="h-1 w-full opacity-80 group-hover:opacity-100 transition-opacity absolute top-0 left-0"
+          className="absolute left-0 top-0 h-1 w-full"
           style={{ backgroundColor: categoryStyle.accent }}
         />
 
@@ -541,67 +547,46 @@ export function ResourceGrid({
           <div>
             <div className="flex items-center justify-between gap-2.5 mb-3.5">
               <span
-                className="inline-flex min-h-[30px] max-w-[66%] items-center justify-center px-2.5 py-1 rounded-md text-center text-[10px] font-sans font-bold leading-tight tracking-normal uppercase border"
-                style={{
-                  backgroundColor: categoryStyle.background,
-                  borderColor: categoryStyle.border,
-                  color: categoryStyle.text
-                }}
+                className="inline-flex min-h-[26px] rounded-full max-w-[66%] items-center justify-center px-2.5 py-1 text-center font-sans text-[12.5px] font-semibold leading-tight text-white"
+                style={{ backgroundColor: categoryStyle.accent }}
               >
                 {item.category}
               </span>
 
-              {item.tier === 1 ? (
-                <span className="inline-flex min-h-[30px] shrink-0 items-center justify-center px-2.5 py-1 rounded-md text-center text-[10px] font-bold bg-utah-red-soft text-utah-red font-sans uppercase tracking-normal leading-tight">
-                  Freshman / Soph
-                </span>
-              ) : item.tier === 2 ? (
-                <span
-                  className="inline-flex min-h-[30px] shrink-0 items-center justify-center px-2.5 py-1 rounded-md text-center text-[10px] font-bold border font-sans uppercase tracking-normal leading-tight"
-                  style={{
-                    backgroundColor: "rgba(112, 142, 153, 0.14)",
-                    borderColor: "rgba(112, 142, 153, 0.32)",
-                    color: "#4F6871"
-                  }}
-                >
-                  Junior / Senior / Graduate
-                </span>
-              ) : (
-                <span className="inline-flex min-h-[30px] shrink-0 items-center justify-center px-2.5 py-1 rounded-md text-center text-[10px] font-bold bg-gray-100 text-gray-650 border border-gray-200 font-sans uppercase tracking-normal leading-tight">
-                  All Levels
-                </span>
-              )}
+              <span className="inline-flex min-h-[26px] shrink-0 items-center justify-center border border-utah-rule bg-white rounded-full px-2.5 py-1 text-center font-sans text-[12.5px] font-semibold leading-tight text-utah-warm">
+                {item.tier === 1 ? "1st / 2nd Year" : item.tier === 2 ? "Upper Div / Grad" : "All Levels"}
+              </span>
             </div>
 
             {item.deadline && (
-              <div className="mb-3 p-2 rounded-md bg-utah-red-soft border border-red-100 flex items-center gap-1.5 text-[11px] font-medium text-utah-red">
-                <Calendar className="w-3.5 h-3.5 shrink-0 text-utah-red" />
-                <span>
-                  Deadline: <strong className="font-bold">{item.deadline}</strong>
-                </span>
+              <div className="mb-3 flex items-center gap-1.5 bg-utah-red rounded-full px-2.5 py-1.5 font-sans text-[12.5px] font-semibold text-white">
+                <Calendar className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span>Deadline: {item.deadline}</span>
               </div>
             )}
 
-            <h3 className="text-base sm:text-lg font-bold text-gray-950 group-hover:text-utah-red transition-colors leading-snug">
+            <h3 className="font-slab text-[18px] font-bold leading-snug text-utah-ink transition-colors group-hover:text-utah-red">
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline flex items-center gap-1.5"
+                className="flex items-center gap-1.5 hover:underline"
               >
                 {item.name}
-                <ExternalLink className="w-3.5 h-3.5 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ExternalLink className="h-3.5 w-3.5 shrink-0 text-utah-warm opacity-0 transition-opacity group-hover:opacity-100" />
               </a>
             </h3>
 
-            <p className="mt-2.5 text-xs text-gray-500 leading-relaxed font-normal">
+            <p className="mt-2.5 text-[14.5px] leading-relaxed text-gray-650">
               {item.description}
             </p>
 
             {item.contact && (
-              <div className="mt-3.5 p-2 bg-gray-50 rounded-lg border border-gray-100 text-[11px] text-gray-600 font-sans">
-                <span className="font-extrabold tracking-normal block uppercase text-[8px] text-gray-400">Office Contact</span>
-                <span className="truncate block mt-0.5 font-medium">{item.contact}</span>
+              <div className="mt-3.5 border-l-2 border-utah-rule bg-utah-shade p-2.5 font-sans text-[12px] text-gray-650">
+                <span className="block text-[12.5px] font-semibold text-utah-warm">
+                  Office Contact
+                </span>
+                <span className="mt-0.5 block truncate">{item.contact}</span>
               </div>
             )}
 
@@ -611,7 +596,7 @@ export function ResourceGrid({
                   e.stopPropagation();
                   setSelectedDepartment(item.department ?? "all");
                 }}
-                className="mt-3 inline-flex items-center rounded-md border border-gray-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-normal text-gray-500 hover:border-gray-300 hover:text-gray-900 transition-colors cursor-pointer"
+                className="mt-3 inline-flex items-center border border-utah-rule bg-white rounded-full px-2.5 py-1 font-sans text-[12.5px] font-semibold text-utah-warm transition-colors hover:border-utah-ink hover:text-utah-ink"
                 id={`department-card-chip-${item.id}`}
               >
                 {item.department}
@@ -619,33 +604,35 @@ export function ResourceGrid({
             )}
           </div>
 
-          <div className="mt-5 pt-4 border-t border-gray-50 flex flex-wrap gap-1">
+          <div className="mt-5 flex flex-wrap gap-1.5 border-t border-gray-150 pt-4">
             {item.relevanceTags.slice(0, 4).map((tag) => (
-              <span
+              <button
                 key={tag}
-                className="text-[10px] font-sans tracking-normal text-gray-550 bg-gray-100/70 px-1.5 py-0.5 rounded cursor-pointer hover:bg-gray-200/70 hover:text-gray-700"
+                type="button"
+                className="bg-utah-shade px-2 py-1 font-sans text-[10.5px] text-gray-550 transition-colors hover:bg-utah-ink hover:text-white"
                 onClick={(e) => {
                   e.stopPropagation();
                   setSearchQuery(tag);
                 }}
               >
-                #{tag}
-              </span>
+                {tag}
+              </button>
             ))}
           </div>
         </div>
 
-        <div className="bg-gray-50/60 px-5 sm:px-6 py-3.5 border-t border-gray-100 flex flex-wrap items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-gray-150 bg-utah-shade px-5 py-3.5 sm:px-6">
           <button
             onClick={(e) => handleShare(item.id, item.url, e)}
-            className="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer"
-            title="Copy URL link"
+            className="border border-utah-rule bg-white p-2 text-utah-warm transition-colors hover:border-utah-ink hover:text-utah-ink"
+            title="Copy link to this resource"
+            aria-label="Copy link to this resource"
             id={`share-btn-${item.id}`}
           >
             {copiedId === item.id ? (
-              <Check className="w-3.5 h-3.5 text-utah-red" />
+              <Check className="h-3.5 w-3.5 text-utah-red" />
             ) : (
-              <Share2 className="w-3.5 h-3.5" />
+              <Share2 className="h-3.5 w-3.5" />
             )}
           </button>
 
@@ -654,12 +641,12 @@ export function ResourceGrid({
               href={item.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 py-1.5 px-2.5 rounded-md text-[11px] font-bold bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:text-gray-950 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 border border-utah-rule bg-white rounded-full px-3 py-2 font-sans text-[12.5px] font-semibold text-gray-650 transition-colors hover:border-utah-ink hover:text-utah-ink"
               id={`source-btn-${item.id}`}
               title={`Open ${sourceLabel}`}
             >
               <span>{sourceLabel}</span>
-              <ExternalLink className="w-3 h-3" />
+              <ExternalLink className="h-3 w-3" />
             </a>
           )}
 
@@ -667,10 +654,10 @@ export function ResourceGrid({
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 py-1.5 px-4 rounded-md text-xs font-bold bg-gray-950 text-white hover:bg-utah-red transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-utah-red rounded-full px-4 py-2 font-sans text-[12.5px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
             id={`visit-btn-${item.id}`}
           >
-            <span>Visit Site</span>
+            <span>Visit site</span>
             <ExternalLink className="w-3 h-3" />
           </a>
         </div>
@@ -679,14 +666,14 @@ export function ResourceGrid({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="directory-browser-container">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-150/60" id="filter-header">
+    <div className="mx-auto max-w-[1240px] px-6 py-12" id="directory-browser-container">
+      <div className="flex flex-col justify-between gap-6 border-b-2 border-utah-ink pb-5 md:flex-row md:items-end" id="filter-header">
         <div>
-          <h2 className="text-xl font-bold font-sans text-gray-950 tracking-normal flex items-center gap-2">
-            <Filter className="w-5 h-5 text-utah-red" />
-            Explore Resources Directory
+          <h2 className="flex items-center gap-2.5 font-slab text-[30px] font-bold text-utah-ink">
+            <Filter className="h-6 w-6 text-utah-red" />
+            Resource Directory
           </h2>
-          <p className="text-xs text-gray-500 mt-1 leading-normal">
+          <p className="mt-1.5 text-[15px] text-gray-650">
             Browse by student need, academic level, or a direct search term.
           </p>
         </div>
@@ -694,130 +681,96 @@ export function ResourceGrid({
         {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all" || isDepartmentFiltered) && (
           <button
             onClick={handleResetFilters}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors self-start cursor-pointer"
+            className="inline-flex items-center gap-2 self-start border-2 border-utah-rule rounded-full px-4 py-2.5 font-sans text-[12.5px] font-semibold text-gray-650 transition-colors hover:border-utah-red hover:text-utah-red"
             id="reset-filters-btn"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Reset active filters
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset filters
           </button>
         )}
       </div>
 
-      <div className="mt-6 uppercase font-sans tracking-normal" id="directory-search-outer-container">
-        <span className="text-[10px] sm:text-[11px] font-bold text-gray-400 block mb-2 px-1">
+      <div className="mt-8 font-sans" id="directory-search-outer-container">
+        <span className="mb-2 block text-[12.5px] font-semibold text-utah-warm">
           Search all resources
         </span>
         <div
-          className={`flex items-center bg-white rounded-lg shadow-sm border transition-all duration-300 pl-4 pr-2.5 py-2.5 ${
-            isSearchFocused
-              ? "border-utah-red ring-4 ring-utah-red-soft scale-[1.005]"
-              : "border-gray-200/80 hover:border-gray-300"
+          className={`flex items-center border-2 bg-white px-4 py-1 transition-colors ${
+            isSearchFocused ? "border-utah-red" : "border-utah-rule hover:border-utah-warm"
           }`}
         >
-          <Search className="w-5 h-5 text-gray-400 shrink-0 select-none mr-3" />
+          <Search className="mr-3 h-5 w-5 shrink-0 text-utah-warm" aria-hidden="true" />
           <input
             ref={inputRef}
-            type="text"
+            type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
             onBlur={() => setIsSearchFocused(false)}
-            placeholder="Search scholarships, tutoring, advising, internships..."
-            className="w-full text-sm outline-none bg-transparent text-gray-900 placeholder-gray-400 font-normal leading-relaxed text-left"
+            placeholder="Search scholarships, tutoring, advising, internships…"
+            className="w-full bg-transparent py-3 text-[16px] text-utah-ink outline-none placeholder:text-utah-warm"
+            aria-label="Search all resources"
             id="directory-search-input"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-650 transition-colors mr-1 shrink-0 cursor-pointer"
+              className="ml-2 shrink-0 p-1.5 text-utah-warm transition-colors hover:text-utah-ink"
+              aria-label="Clear search"
               id="directory-search-clear-button"
             >
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-5 z-20 shadow-xs" id="filter-interface-controls">
-        <div className="bg-white p-5 rounded-lg border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div className="mt-6 flex flex-col gap-6" id="filter-interface-controls">
+        <div className="flex flex-col justify-between gap-5 border border-utah-rule bg-utah-shade p-5 md:flex-row md:items-center">
           <div className="shrink-0">
-            <span className="text-xs font-sans font-bold text-gray-400 uppercase tracking-normal block">
+            <span className="block font-sans text-[12.5px] font-semibold text-utah-warm">
               Academic Level
             </span>
-            <span className="text-[13px] font-sans font-medium text-gray-700 block mt-0.5">
-              Refined by student timeline relevance.
+            <span className="mt-1 block text-[14px] text-gray-650">
+              Filter to what's relevant for where you are in your degree.
             </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5" id="journey-tier-toggles">
-            <button
-              onClick={() => setSelectedTier("all")}
-              className={`px-4 py-2.5 rounded-md text-xs sm:text-sm font-semibold tracking-normal transition-all active:scale-95 cursor-pointer ${
-                selectedTier === "all"
-                  ? "bg-utah-red text-white shadow-md shadow-red-600/15"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
-              id="tier-toggle-all"
-            >
-              All Academic Levels
-            </button>
-            <button
-              onClick={() => setSelectedTier(1)}
-              className={`px-4 py-2.5 rounded-md text-xs sm:text-sm font-semibold tracking-normal transition-all active:scale-95 cursor-pointer ${
-                selectedTier === 1
-                  ? "bg-utah-red text-white shadow-md shadow-red-600/15"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
-              id="tier-toggle-1"
-            >
-              Tier 1: Freshman & Sophomore
-            </button>
-            <button
-              onClick={() => setSelectedTier(2)}
-              className={`px-4 py-2.5 rounded-md text-xs sm:text-sm font-semibold tracking-normal transition-all active:scale-95 cursor-pointer ${
-                selectedTier === 2
-                  ? "text-white shadow-md shadow-[#708E99]/15"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
-              style={
-                selectedTier === 2
-                  ? { backgroundColor: "#708E99", borderColor: "#708E99" }
-                  : {
-                      backgroundColor: "rgba(112, 142, 153, 0.08)",
-                      borderColor: "rgba(112, 142, 153, 0.28)",
-                      color: "#4F6871"
-                    }
-              }
-              id="tier-toggle-2"
-            >
-              Tier 2: Junior, Senior & Graduate
-            </button>
+            {TIER_OPTIONS.map((option) => {
+              const isSelected = selectedTier === option.value;
+              return (
+                <button
+                  key={String(option.value)}
+                  onClick={() => setSelectedTier(option.value)}
+                  className={`border-2 rounded-full px-4 py-2.5 font-sans text-[12.5px] font-semibold transition-colors ${
+                    isSelected
+                      ? "border-utah-red bg-utah-red text-white"
+                      : "border-utah-rule bg-white text-gray-650 hover:border-utah-red hover:text-utah-red"
+                  }`}
+                  aria-pressed={isSelected}
+                  id={`tier-toggle-${option.value}`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-1.5 py-1" id="category-scroller">
+        <div className="flex flex-wrap items-center gap-2" id="category-scroller">
           {CATEGORIES.map((cat) => {
             const isSelected = selectedCategoryValue === cat.value;
-            const categoryStyle = getDisplayCategoryStyle(cat.value);
 
             return (
               <button
                 key={cat.value}
                 onClick={() => handleCategorySelect(cat.value)}
-                className="px-3.5 py-2 rounded-md text-xs font-semibold cursor-pointer transition-all border shrink-0 hover:brightness-95"
-                style={
+                className={`shrink-0 border rounded-full px-3.5 py-2 font-sans text-[13px] font-semibold transition-colors ${
                   isSelected
-                    ? {
-                        backgroundColor: categoryStyle.accent,
-                        borderColor: categoryStyle.accent,
-                        color: "#ffffff"
-                      }
-                    : {
-                        backgroundColor: categoryStyle.background,
-                        borderColor: categoryStyle.border,
-                        color: categoryStyle.text
-                      }
-                }
+                    ? "border-utah-ink bg-utah-ink text-white"
+                    : "border-utah-rule bg-white text-gray-650 hover:border-utah-ink hover:text-utah-ink"
+                }`}
                 aria-pressed={isSelected}
                 id={`cat-pill-${cat.value.toLowerCase().replace(/\s/g, "-")}`}
               >
@@ -828,12 +781,12 @@ export function ResourceGrid({
         </div>
 
         {availableDepartmentOptions.length > 1 && (
-          <div className="bg-white p-4 rounded-lg border border-gray-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex flex-col justify-between gap-4 border border-utah-rule bg-white p-5 lg:flex-row lg:items-center">
             <div className="shrink-0">
-              <span className="text-xs font-sans font-bold text-gray-400 uppercase tracking-normal block">
+              <span className="block font-sans text-[12.5px] font-semibold text-utah-warm">
                 Department Focus
               </span>
-              <span className="text-[13px] font-sans font-medium text-gray-700 block mt-0.5">
+              <span className="mt-1 block text-[14px] text-gray-650">
                 Narrow to resources pulled from a specific department site.
               </span>
             </div>
@@ -846,10 +799,10 @@ export function ResourceGrid({
                   <button
                     key={department.value}
                     onClick={() => setSelectedDepartment(department.value)}
-                    className={`px-3 py-2 rounded-md text-xs font-semibold tracking-normal transition-all border cursor-pointer ${
+                    className={`border rounded-full px-3 py-2 font-sans text-[13px] font-semibold transition-colors ${
                       isSelected
-                        ? "bg-gray-950 text-white border-gray-950 shadow-md shadow-gray-900/10"
-                        : "bg-white text-gray-700 hover:bg-gray-100 border-gray-200"
+                        ? "border-utah-ink bg-utah-ink text-white"
+                        : "border-utah-rule bg-white text-gray-650 hover:border-utah-ink hover:text-utah-ink"
                     }`}
                     aria-pressed={isSelected}
                     id={`department-pill-${department.value.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
@@ -864,18 +817,13 @@ export function ResourceGrid({
       </div>
 
       <section
-        className="mt-7 rounded-lg border bg-white px-5 py-6 sm:px-8 text-center"
-        style={{ borderColor: activeCategoryStyle.border }}
+        className="mt-8 border border-utah-rule bg-utah-shade px-5 py-8 text-center sm:px-8"
         id="active-category-panel"
       >
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto max-w-3xl">
           <span
-            className="inline-flex items-center rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-normal border"
-            style={{
-              backgroundColor: activeCategoryStyle.background,
-              borderColor: activeCategoryStyle.border,
-              color: activeCategoryStyle.text
-            }}
+            className="inline-flex items-center rounded-full px-2.5 py-1 font-sans text-[12.5px] font-semibold text-white"
+            style={{ backgroundColor: activeCategoryStyle.accent }}
           >
             {isSearchActive
               ? "Global Search"
@@ -885,14 +833,14 @@ export function ResourceGrid({
                   ? "Directory Overview"
                   : "Category View"}
           </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-gray-950 tracking-normal">
+          <h2 className="mt-4 font-slab text-[26px] font-bold text-utah-ink sm:text-[32px]">
             {isSearchActive
               ? "Search Results"
               : isDepartmentFiltered
                 ? `${selectedDepartmentDetail.label} Resources`
                 : selectedCategoryDetail.title}
           </h2>
-          <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+          <p className="mx-auto mt-3 max-w-2xl text-[16px] leading-relaxed text-gray-650">
             {isSearchActive
               ? isDepartmentFiltered
                 ? `Searching within ${selectedDepartmentDetail.label} resources while preserving your opened category.`
@@ -910,27 +858,22 @@ export function ResourceGrid({
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group w-full sm:w-[calc((100%-1.5rem)/3)] min-w-[14rem] max-w-[19rem] rounded-lg border bg-white px-4 py-3 transition-all hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ borderColor: activeCategoryStyle.border }}
+                  className="group w-full min-w-[14rem] max-w-[19rem] border border-utah-rule bg-white px-4 py-4 transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] sm:w-[calc((100%-1.5rem)/3)]"
                   id={`category-featured-${resource.id}`}
                 >
                   <span
-                    className="inline-flex items-center rounded-md border px-2 py-1 text-[9px] font-bold uppercase tracking-normal"
-                    style={{
-                      backgroundColor: activeCategoryStyle.background,
-                      borderColor: activeCategoryStyle.border,
-                      color: activeCategoryStyle.text
-                    }}
+                    className="inline-flex items-center rounded-full px-2 py-1 font-sans text-[12.5px] font-semibold text-white"
+                    style={{ backgroundColor: activeCategoryStyle.accent }}
                   >
                     {getFeaturedResourceLabel(resource.id)}
                   </span>
-                  <span className="mt-2 flex items-start justify-between gap-3">
-                    <span className="text-sm font-bold leading-snug text-gray-950 group-hover:text-utah-red">
+                  <span className="mt-2.5 flex items-start justify-between gap-3">
+                    <span className="font-slab text-[16px] font-bold leading-snug text-utah-ink group-hover:text-utah-red">
                       {resource.name}
                     </span>
-                    <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-400 group-hover:text-utah-red" />
+                    <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utah-warm group-hover:text-utah-red" />
                   </span>
-                  <span className="mt-1.5 block text-xs leading-relaxed text-gray-550">
+                  <span className="mt-2 block text-[14px] leading-relaxed text-gray-650">
                     {resource.description}
                   </span>
                 </a>
@@ -942,7 +885,7 @@ export function ResourceGrid({
             {isSearchActive && selectedCategoryValue !== "all" && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-gray-950 hover:bg-utah-red text-white text-xs font-bold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 bg-utah-ink rounded-full px-5 py-2.5 font-sans text-[12.5px] font-semibold text-white transition-colors hover:bg-utah-red"
                 id="return-to-open-category-btn"
               >
                 Back to {selectedCategoryDetail.title}
@@ -953,7 +896,7 @@ export function ResourceGrid({
                 href={selectedCategoryDetail.actionHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-gray-950 hover:bg-utah-red text-white text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-1.5 bg-utah-ink rounded-full px-5 py-2.5 font-sans text-[12.5px] font-semibold text-white transition-colors hover:bg-utah-red"
                 id="category-primary-link"
               >
                 {selectedCategoryDetail.actionLabel}
@@ -965,48 +908,49 @@ export function ResourceGrid({
       </section>
 
       <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-1" id="results-count-container">
-        <span className="text-xs font-sans font-medium text-gray-500">
+        <span className="font-sans text-[14px] text-gray-650">
           {resultsSummary}
         </span>
         {(searchQuery || selectedCategoryValue !== "all" || selectedTier !== "all" || isDepartmentFiltered) && (
-          <span className="text-[11px] font-sans font-bold tracking-normal uppercase bg-utah-red-soft text-utah-red px-2.5 py-1 rounded-md self-start sm:self-auto">
+          <span className="self-start bg-utah-red rounded-full px-2.5 py-1 font-sans text-[12.5px] font-semibold text-white sm:self-auto">
             Active Filter Set
           </span>
         )}
       </div>
 
       {filteredResources.length === 0 ? (
-        <div className="mt-10 p-12 bg-white rounded-lg border border-gray-200 text-center" id="no-results-panel">
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-400 mx-auto shadow-xs border border-gray-100">
-            <HelpCircle className="w-5 h-5" />
+        <div className="mt-10 border border-utah-rule bg-utah-shade p-14 text-center" id="no-results-panel">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center border border-utah-rule bg-white text-utah-warm">
+            <HelpCircle className="h-5 w-5" />
           </div>
-          <h3 className="mt-4 font-bold text-gray-950 text-sm">No matched University Resources</h3>
-          <p className="mt-1.5 text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
-            We could not locate any science guides matching <span className="font-semibold text-gray-800">"{searchQuery}"</span> under current level settings.
+          <h3 className="mt-5 font-slab text-[22px] font-bold text-utah-ink">No resources matched</h3>
+          <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-gray-650">
+            Nothing in the directory matches{" "}
+            <span className="font-semibold text-utah-ink">“{searchQuery}”</span> with your current filters.
           </p>
           <button
             onClick={handleResetFilters}
-            className="mt-5 px-5 py-2 bg-gray-950 hover:bg-utah-red text-white text-xs font-semibold rounded-md transition-all cursor-pointer"
+            className="mt-6 bg-utah-red rounded-full px-6 py-3 font-sans text-[13px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
             id="empty-state-reset-btn"
           >
-            Clear Search & Reset Filters
+            Clear search and filters
           </button>
         </div>
       ) : (
         <div id="resources-grouped-results">
           {topMatches.length > 0 && (
             <section className="mt-8" id="group-best-matches">
-              <div className="mb-3 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-gray-200 pb-3">
+              <div className="mb-5 flex flex-col gap-2 border-b-2 border-utah-ink pb-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="flex items-center gap-2.5">
                   <span
-                    className="h-3 w-3 rounded-sm shrink-0 bg-utah-red"
+                    className="h-4 w-1.5 shrink-0 bg-utah-red"
                     aria-hidden="true"
                   />
-                  <h3 className="text-sm sm:text-base font-bold text-gray-950 tracking-normal">
+                  <h3 className="font-slab text-[20px] font-bold text-utah-ink">
                     Best Matches
                   </h3>
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-normal text-gray-400">
+                <span className="font-sans text-[12.5px] font-semibold text-utah-warm">
                   Closest to "{trimmedSearchQuery}"
                 </span>
               </div>
@@ -1021,18 +965,18 @@ export function ResourceGrid({
 
             return (
               <section key={groupName} className="mt-8" id={`group-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
-                <div className="mb-3 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-gray-200 pb-3">
+                <div className="mb-5 flex flex-col gap-2 border-b-2 border-utah-ink pb-3 sm:flex-row sm:items-end sm:justify-between">
                   <div className="flex items-center gap-2.5">
                     <span
-                      className="h-3 w-3 rounded-sm shrink-0"
+                      className="h-4 w-1.5 shrink-0"
                       style={{ backgroundColor: groupStyle.accent }}
                       aria-hidden="true"
                     />
-                    <h3 className="text-sm sm:text-base font-bold text-gray-950 tracking-normal">
+                    <h3 className="font-slab text-[20px] font-bold text-utah-ink">
                       {groupName}
                     </h3>
                   </div>
-                  <span className="text-[11px] font-bold uppercase tracking-normal text-gray-400">
+                  <span className="font-sans text-[12.5px] font-semibold text-utah-warm">
                     {groupItems.length} {groupItems.length === 1 ? "resource" : "resources"}
                   </span>
                 </div>
