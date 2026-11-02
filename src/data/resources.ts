@@ -34,6 +34,7 @@ export interface Resource {
   sourceLabel?: string;
   tier: 1 | 2 | "all"; // 1 = Freshman/Sophomore, 2 = Junior/Senior/Graduate, "all" = Useful at all levels
   deadline?: string | null;
+  isNew?: boolean; // shown with a "New" badge in the directory
   contact?: string | null;
   relevanceTags: string[];
 }
@@ -3143,14 +3144,16 @@ export const RESOURCES_DATA: Resource[] = [
     relevanceTags: ["free apps", "ucc", "self help", "stress", "sleep"]
   },
   {
-    id: "telus-health-student-support",
-    name: "TELUS Health Student Support",
-    description: "Free 24/7 virtual counseling and emotional support for University of Utah students by app, phone, text, or web.",
-    url: "https://counselingcenter.utah.edu/services/myssp.php",
+    id: "mantra-health-student-support",
+    name: "Mantra Health (replaces TELUS Health)",
+    description: "Free virtual mental health support from the University Counseling Center. ConnectNow gives in-the-moment support with no appointment or referral: phone 24/7, plus video and text 6 a.m. to 10 p.m. MT. Virtual therapy needs a UCC referral. Replaced TELUS Health in August 2026.",
+    url: "https://mantrahealth.com/utah",
+    sourceUrl: "https://attheu.utah.edu/students/university-counseling-center-partners-with-mantra-health-to-expand-virtual-mental-health-support/",
+    sourceLabel: "@theU announcement, Sept. 3, 2026",
     category: "Wellness & Mental Health",
     tier: "all",
-    contact: "1-833-369-1250",
-    relevanceTags: ["telus health", "virtual counseling", "24/7 support", "my ssp"]
+    contact: "888-319-5111 (24/7)",
+    relevanceTags: ["mantra health", "connectnow", "virtual counseling", "24/7 support", "telus health", "myssp", "teletherapy"]
   },
   {
     id: "headspace-app",
@@ -3873,5 +3876,116 @@ export const RESOURCES_DATA: Resource[] = [
       "telescope domes",
       "colloquiums"
     ]
+  },
+  {
+    id: "answer-u",
+    name: "Answer U",
+    description: "The university's new front door for any student question. Ask about classes, registration, financial aid, housing, tutoring, UCard, Canvas, WiFi or wellbeing and get pointed to the right office. In person at the Marriott Library information desks and Knowledge Commons (level 2), or by phone, email and chat.",
+    url: "https://answeru.utah.edu/",
+    sourceUrl: "https://attheu.utah.edu/facultystaff/answer-u-for-every-student-for-every-question/",
+    sourceLabel: "@theU: Answer U",
+    category: "Student Access & Support",
+    subcategory: "Student Navigation",
+    tier: "all",
+    isNew: true,
+    contact: "801-581-8558 / answer-u@lists.utah.edu",
+    relevanceTags: ["answer u", "ask anything navigate everything", "student experience project", "navigation", "front door", "marriott library", "where do i go", "help"]
+  },
+  {
+    id: "wellness-hub",
+    name: "Wellness Hub",
+    description: "Start here if you are not sure where to begin. The Student Affairs Wellness Hub connects you with health, wellness, mental health, healthcare and disability access resources. Student Services Building, Room 350.",
+    url: "https://wellnesshub.utah.edu/",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "801-581-7200",
+    relevanceTags: ["wellness hub", "student services building", "where to start", "mental health", "student affairs"]
+  },
+  {
+    id: "university-counseling-center",
+    name: "University Counseling Center (UCC)",
+    description: "Individual and group counseling, crisis services, workshops, prevention programming and other mental health services for students.",
+    url: "https://counselingcenter.utah.edu/",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "801-581-6826",
+    relevanceTags: ["ucc", "counseling", "therapy", "crisis services", "group counseling", "workshops"]
+  },
+  {
+    id: "peer-wellbeing-navigation",
+    name: "Peer Well-being Navigation",
+    description: "Free peer navigators help you find and use health, wellness, mental health and academic services, then follow up so you can choose next steps. View navigators and book an appointment.",
+    url: "https://wellness.utah.edu/student-opportunities/navigation.php",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    relevanceTags: ["peer navigator", "well-being navigation", "peer support", "book appointment", "case management"]
+  },
+  {
+    id: "mh1-mental-health-first-responders",
+    name: "Mental Health First Responders (MH1)",
+    description: "No-cost, after-hours mental health support for stress, anxiety, depression, relationships, coping and other needs. Built for students living in campus housing. Check mh1.utah.edu for current service hours.",
+    url: "https://mh1.utah.edu",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "385-321-5356",
+    relevanceTags: ["mh1", "after hours", "mental health first responders", "crisis", "campus housing"]
+  },
+  {
+    id: "utah-warm-line",
+    name: "HMHI Utah Warm Line",
+    description: "Free support from certified peer specialists with lived experience. A good option if you want connection, encouragement or someone to talk to before a situation becomes a crisis. Open to students, faculty and staff.",
+    url: "tel:8015871055",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "801-587-1055 / 833-773-2588",
+    relevanceTags: ["warm line", "hmhi", "peer support", "huntsman mental health institute", "talk to someone", "non-crisis"]
+  },
+  {
+    id: "spiritual-care-chaplain",
+    name: "Spiritual Care and Chaplain",
+    description: "Confidential spiritual and emotional support through the Center for Campus Wellness. People of all faith traditions, spiritual identities and no religious affiliation are welcome, for grief, loss, meaning, relationships and life transitions.",
+    url: "https://wellness.utah.edu/programs/",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "801-581-7776",
+    relevanceTags: ["chaplain", "spiritual care", "grief", "loss", "center for campus wellness", "faith"]
+  },
+  {
+    id: "ccw-workshops",
+    name: "Center for Campus Wellness Workshops",
+    description: "Presentations and workshops on health and wellness topics. See the events list for available trainings.",
+    url: "https://studentaffairs.utah.edu/health_and_wellness_events/index.php",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    relevanceTags: ["workshops", "trainings", "presentations", "wellness events", "center for campus wellness"]
+  },
+  {
+    id: "victim-survivor-advocacy",
+    name: "Victim-Survivor Advocacy (VSA)",
+    description: "Free, confidential, trauma-informed support for students, faculty and staff who have experienced violence, abuse or harm. Advocates help you understand options, navigate resources and decide what support feels right.",
+    url: "https://www.wellness.utah.edu/programs/violence-harm-support",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    contact: "801-581-7776",
+    relevanceTags: ["vsa", "victim advocate", "violence", "abuse", "harm", "confidential", "trauma informed"]
+  },
+  {
+    id: "student-mental-health-resources",
+    name: "Student Mental Health Resources",
+    description: "Student Affairs page listing counseling, crisis support, workshops and other mental health resources for U students.",
+    url: "https://studentaffairs.utah.edu/mentalhealth",
+    category: "Wellness & Mental Health",
+    tier: "all",
+    relevanceTags: ["mental health resources", "student affairs", "counseling", "crisis"]
+  },
+  {
+    id: "student-affairs-faculty-guide",
+    name: "Student Affairs Guide: When Students Turn to You",
+    description: "Quick reference Student Affairs made for faculty, listing programs and services in Student Health and Wellness, Engagement and Belonging, and Support and Resources. Useful for students too, to see what to ask for.",
+    url: "https://studentaffairs.utah.edu/_resources/documents/student-blog/sa-facultyguide.pdf",
+    category: "Student Access & Support",
+    subcategory: "Student Navigation",
+    tier: "all",
+    relevanceTags: ["faculty guide", "student affairs", "referral", "support and resources", "when students turn to you"]
   }
 ];

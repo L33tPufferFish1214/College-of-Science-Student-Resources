@@ -198,10 +198,10 @@ export function SearchSection({
                 event.preventDefault();
                 setActiveView("resources");
               }}
-              className="flex flex-col sm:flex-row"
+              className="flex flex-col gap-3 sm:flex-row sm:gap-0"
             >
               <div
-                className={`flex flex-1 items-center border-2 bg-white px-4 transition-colors sm:border-r-0 ${
+                className={`flex flex-1 items-center rounded-[10px] border-2 bg-white pl-5 pr-4 transition-colors sm:rounded-r-none sm:border-r-0 ${
                   isFocused ? "border-utah-red" : "border-utah-rule"
                 }`}
               >
@@ -214,7 +214,7 @@ export function SearchSection({
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setTimeout(() => setIsFocused(false), 200)}
                   placeholder="Search scholarships, tutoring, advising, internships, wellness support…"
-                  className="w-full bg-transparent py-3.5 text-[16px] text-utah-ink outline-none placeholder:text-utah-warm"
+                  className="w-full rounded-none bg-transparent py-3.5 text-[16px] text-utah-ink outline-none focus-visible:outline-none placeholder:text-utah-warm [&::-webkit-search-cancel-button]:hidden"
                   aria-label="Search resources"
                   id="global-search-input"
                 />
@@ -232,7 +232,7 @@ export function SearchSection({
               </div>
               <button
                 type="submit"
-                className="bg-utah-red rounded-full px-9 py-3.5 font-sans text-[13px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
+                className="rounded-[10px] bg-utah-red px-9 py-3.5 font-sans text-[14px] font-semibold text-white sm:rounded-l-none transition-colors hover:bg-utah-red-dark"
                 id="search-submit-button"
               >
                 Search

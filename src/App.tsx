@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  Briefcase, Building2, CalendarCheck, HandCoins, HeartPulse, Home,
+  ArrowUpRight, Briefcase, Building2, CalendarCheck, HandCoins, HeartPulse, Home, Mail, MapPin, Phone,
   type LucideIcon, Microscope, ShieldAlert, Users, Wallet, Accessibility, BookOpen
 } from "lucide-react";
 import { Header } from "./components/Header";
@@ -311,9 +311,6 @@ export default function App() {
                 <div className="mb-11 text-center">
                   <h2 className="font-slab text-[26px] font-bold text-utah-ink sm:text-[34px]">Start Here</h2>
                   <div className="mx-auto mb-4 mt-3.5 h-[3px] w-14 bg-utah-red" />
-                  <p className="mx-auto max-w-2xl text-[16px] text-gray-650">
-                    The hubs and programs students reach for first.
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3" id="homepage-spotlight-grid">
@@ -380,6 +377,67 @@ export default function App() {
               </div>
             </section>
 
+            {/* ---------- Answer U: the university's new front-door service, kept below the core browsing ---------- */}
+            <section className="py-16 sm:py-[72px]" id="answer-u-section">
+              <div className="mx-auto max-w-[1240px] px-6">
+                <div className="grid overflow-hidden rounded-3xl border-2 border-utah-red bg-white shadow-[0_12px_32px_rgba(190,0,0,0.12)] lg:grid-cols-[1.25fr_1fr]">
+                  <div className="p-8 sm:p-10">
+                    <h2 className="font-slab text-[28px] font-bold leading-tight text-utah-ink sm:text-[36px]">
+                      Answer U: ask anything, navigate everything.
+                    </h2>
+                    <p className="mt-3 max-w-xl text-[16.5px] text-gray-650">
+                      The university's new front door for any student question. Classes, registration, financial aid,
+                      tutoring, UCard, Canvas, WiFi, wellbeing: Answer U points you to the right office so you do not have
+                      to guess.
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <a
+                        href="https://answeru.utah.edu/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-utah-red px-6 py-3 font-sans text-[14px] font-semibold text-white transition-colors hover:bg-utah-red-dark"
+                        id="answer-u-link"
+                      >
+                        Visit Answer U <ArrowUpRight size={16} aria-hidden="true" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickResourceClick(["answer-u"])}
+                        className="rounded-full border-2 border-utah-red px-6 py-3 font-sans text-[14px] font-semibold text-utah-red transition-colors hover:bg-utah-red hover:text-white"
+                      >
+                        See it in the directory
+                      </button>
+                    </div>
+                  </div>
+                  <ul className="flex list-none flex-col justify-center gap-5 bg-utah-red-soft p-8 sm:p-10">
+                    <li className="flex items-start gap-3.5">
+                      <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-utah-red" aria-hidden="true" />
+                      <span className="text-[15px] text-utah-ink">
+                        <strong className="block font-bold">In person</strong>
+                        Marriott Library information desks and the Knowledge Commons, level 2
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3.5">
+                      <Phone className="mt-0.5 h-5 w-5 shrink-0 text-utah-red" aria-hidden="true" />
+                      <span className="text-[15px] text-utah-ink">
+                        <strong className="block font-bold">Call</strong>
+                        <a href="tel:8015818558" className="underline underline-offset-2">801-581-8558</a>
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3.5">
+                      <Mail className="mt-0.5 h-5 w-5 shrink-0 text-utah-red" aria-hidden="true" />
+                      <span className="text-[15px] text-utah-ink">
+                        <strong className="block font-bold">Email</strong>
+                        <a href="mailto:answer-u@lists.utah.edu" className="underline underline-offset-2">
+                          answer-u@lists.utah.edu
+                        </a>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
             {/* ---------- Featured programs on the U's pattern band ---------- */}
             <section
               className="on-dark bg-utah-char bg-[length:300px] py-16 sm:py-[72px]"
@@ -390,9 +448,6 @@ export default function App() {
                 <div className="mb-11 text-center">
                   <h2 className="font-slab text-[26px] font-bold text-white sm:text-[34px]">Career Accelerators</h2>
                   <div className="mx-auto mb-4 mt-3.5 h-[3px] w-14 bg-utah-red" />
-                  <p className="mx-auto max-w-2xl text-[16px] text-white/85">
-                    Three College of Science programs worth putting a deadline in your calendar for.
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-7 md:grid-cols-3" id="featured-cards-grid">

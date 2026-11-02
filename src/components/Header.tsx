@@ -21,7 +21,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const LINK_BASE =
   "font-sans text-[14.5px] font-semibold tracking-normal text-white " +
-  "border-b-[3px] py-1.5 transition-colors hover:border-utah-red";
+  "rounded-[10px] px-3.5 py-2 transition-colors hover:bg-utah-red-dark";
 
 export function Header({ activeView, setActiveView }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -54,7 +54,7 @@ export function Header({ activeView, setActiveView }: HeaderProps) {
             </span>
           </button>
 
-          <nav className="ml-auto hidden items-center gap-7 lg:flex" id="desktop-nav">
+          <nav className="ml-auto hidden items-center gap-1.5 lg:flex" id="desktop-nav">
             {NAV_ITEMS.map((item) =>
               "href" in item ? (
                 <a
@@ -62,7 +62,7 @@ export function Header({ activeView, setActiveView }: HeaderProps) {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`${LINK_BASE} border-transparent`}
+                  className={LINK_BASE}
                 >
                   {item.label}
                 </a>
@@ -73,7 +73,7 @@ export function Header({ activeView, setActiveView }: HeaderProps) {
                   onClick={() => go(item.view)}
                   aria-current={activeView === item.view ? "page" : undefined}
                   className={`${LINK_BASE} ${
-                    activeView === item.view ? "border-utah-red" : "border-transparent"
+                    activeView === item.view ? "bg-utah-red" : ""
                   }`}
                   id={`nav-${item.view}`}
                 >
@@ -116,7 +116,7 @@ export function Header({ activeView, setActiveView }: HeaderProps) {
                 key={item.label}
                 type="button"
                 onClick={() => go(item.view)}
-                className={`block w-full border-b border-[#2a2a2a] px-6 py-4 text-left font-sans text-[13px] font-bold uppercase tracking-[0.09em] ${
+                className={`block w-full border-b border-[#2a2a2a] px-6 py-4 text-left font-sans text-[15px] font-semibold ${
                   activeView === item.view ? "bg-utah-red text-white" : "text-white"
                 }`}
               >

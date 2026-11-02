@@ -153,7 +153,7 @@ export function OverwhelmedRescue({ onSuggestQuery, setActiveView }: Overwhelmed
 
       <div className="mx-auto max-w-[1240px] px-6 py-14">
         <div
-          className="grid grid-cols-1 gap-px border border-utah-rule bg-utah-rule md:grid-cols-2 lg:grid-cols-4"
+          className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
           id="rescue-scenarios-grid"
         >
           {HELP_SCENARIOS.map((item) => {
@@ -164,14 +164,14 @@ export function OverwhelmedRescue({ onSuggestQuery, setActiveView }: Overwhelmed
                 key={item.id}
                 onClick={() => handleRescueSelect(item)}
                 aria-pressed={isSelected}
-                className={`group flex h-full flex-col justify-between p-7 text-left transition-colors ${
-                  isSelected ? "bg-utah-ink" : "bg-white hover:bg-utah-shade"
+                className={`group flex h-full flex-col justify-between rounded-2xl border p-7 text-left transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(0,0,0,0.10)] ${
+                  isSelected ? "border-utah-ink bg-utah-ink" : "border-utah-rule bg-white hover:border-utah-red"
                 }`}
                 id={`rescue-btn-${item.id}`}
               >
                 <div>
                   <span
-                    className={`mb-5 inline-flex h-11 w-11 items-center justify-center ${
+                    className={`mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl ${
                       isSelected ? "bg-utah-red text-white" : "bg-utah-red-soft text-utah-red"
                     }`}
                   >

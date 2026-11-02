@@ -72,3 +72,6 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* The search pill draws its own focus border, so the field itself shows no ring. */
+#global-search-input:focus-visible { outline: none; }

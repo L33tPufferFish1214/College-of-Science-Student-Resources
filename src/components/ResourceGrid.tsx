@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-import { Calendar, Check, ExternalLink, Filter, HelpCircle, RotateCcw, Search, Share2, X } from "lucide-react";
+import { Calendar, Check, ExternalLink, Filter, HelpCircle, RotateCcw, Search, Share2, Sparkles, X } from "lucide-react";
 import { getCategoryStyle } from "../data/categoryStyles";
 import type { Resource, ResourceCategory, ResourceDepartment } from "../data/resources";
 import {
@@ -558,8 +558,15 @@ export function ResourceGrid({
               </span>
             </div>
 
+            {item.isNew && (
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border-2 border-utah-red bg-utah-red-soft px-3 py-1 font-sans text-[12.5px] font-bold text-utah-red-dark">
+                <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                New at the U
+              </div>
+            )}
+
             {item.deadline && (
-              <div className="mb-3 flex items-center gap-1.5 bg-utah-red rounded-full px-2.5 py-1.5 font-sans text-[12.5px] font-semibold text-white">
+              <div className="mb-3 flex items-center gap-1.5 bg-utah-red rounded-[10px] px-3 py-2 font-sans text-[12.5px] font-semibold text-white">
                 <Calendar className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 <span>Deadline: {item.deadline}</span>
               </div>
